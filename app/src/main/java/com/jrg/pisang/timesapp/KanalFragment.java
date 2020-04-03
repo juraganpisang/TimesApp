@@ -32,9 +32,9 @@ public class KanalFragment extends Fragment {
        // @bind(R.id.shimmer_view_container) ShimmerFrameLayout shimmerFrameLayout;
         //shimmerFrameLayout.bind(this);
     }
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
-
-    }
+//    public void onViewCreated(View view, Bundle savedInstanceState) {
+//        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
+//
+//    }
 
 }
