@@ -8,4 +8,5 @@
     <color name="light_grey">#ECECEC</color>
     <color name="grey">#AEAEAE</color>
     <color name="light_red">#FFBCBC</color>
+    <color name="background">#dddddd</color>
 </resources>

@@ -19,4 +19,10 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- Tab Menu -->
+    <string name="headline">Headline</string>
+    <string name="late_news">Latest News</string>
+    <string name="kanal">Kanal</string>
+    <string name="fokus">Fokus</string>
 </resources>
