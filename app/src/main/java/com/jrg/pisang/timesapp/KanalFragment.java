@@ -1,6 +1,7 @@
 package com.jrg.pisang.timesapp;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,16 +9,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toolbar;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.jrg.pisang.timesapp.News.DetailBerita;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class KanalFragment extends Fragment {
-    ShimmerFrameLayout shimmerFrameLayout ;
+    Button detail_berita;
 
     public KanalFragment() {
         // Required empty public constructor
@@ -32,9 +35,18 @@ public class KanalFragment extends Fragment {
        // @bind(R.id.shimmer_view_container) ShimmerFrameLayout shimmerFrameLayout;
         //shimmerFrameLayout.bind(this);
     }
-//    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
-//
-//    }
+
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        detail_berita = view.findViewById(R.id.detail_berita);
+        detail_berita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i;
+                i = new Intent(getActivity(), DetailBerita.class);
+                startActivity(i);
+            }
+        });
+
+    }
 
 }
