@@ -2,20 +2,20 @@ package com.jrg.pisang.timesapp.Model;
 
 public class NewsModel {
 
-    String captionNews, sourceNews, timeNews;
+    String titleNews, sourceNews, dateNews;
 
-    public NewsModel(String captionNews, String sourceNews, String timeNews) {
-        this.captionNews = captionNews;
+    public NewsModel(String titleNews, String sourceNews, String dateNews) {
+        this.titleNews = titleNews;
         this.sourceNews = sourceNews;
-        this.timeNews = timeNews;
+        this.dateNews = dateNews;
     }
 
-    public String getCaptionNews() {
-        return captionNews;
+    public String getTitleNews() {
+        return titleNews;
     }
 
-    public void setCaptionNews(String captionNews) {
-        this.captionNews = captionNews;
+    public void setTitleNews(String titleNews) {
+        this.titleNews = titleNews;
     }
 
     public String getSourceNews() {
@@ -26,11 +26,11 @@ public class NewsModel {
         this.sourceNews = sourceNews;
     }
 
-    public String getTimeNews() {
-        return timeNews;
+    public String getDateNews() {
+        return dateNews;
     }
 
-    public void setTimeNews(String timeNews) {
-        this.timeNews = timeNews;
+    public void setDateNews(String dateNews) {
+        this.dateNews = dateNews;
     }
 }

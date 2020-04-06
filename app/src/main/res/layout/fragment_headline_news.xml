@@ -17,13 +17,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/shimmer_news_view" />
-
-            <include layout="@layout/shimmer_news_view" />
-
-            <include layout="@layout/shimmer_news_view" />
-
-            <include layout="@layout/shimmer_news_view" />
+            <include layout="@layout/row_news_headline" />
+            <include layout="@layout/row_news_headline" />
+            <include layout="@layout/row_news_headline" />
+            <include layout="@layout/row_news_headline" />
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 

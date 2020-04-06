@@ -1,7 +1,6 @@
 package com.jrg.pisang.timesapp.News;
 
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,11 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewAdapter;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 
@@ -28,10 +26,12 @@ import java.util.ArrayList;
  */
 public class HeadlineNewsFragment extends Fragment {
 
-    RecyclerViewAdapter recyclerViewAdapter;
+    RecyclerViewNewsAdapter recyclerViewNewsAdapter;
     RecyclerView recyclerView;
     ArrayList<NewsModel> models = new ArrayList<>();
     ShimmerFrameLayout parentShimmerLayout;
+
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     public HeadlineNewsFragment() {
         // Required empty public constructor
@@ -42,14 +42,15 @@ public class HeadlineNewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_headline_news, container, false);
+
         parentShimmerLayout = view.findViewById(R.id.parentShimmerLayout);
         recyclerView = view.findViewById(R.id.newsRecyclerView);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(models, getContext());
+        recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(models, getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(recyclerViewNewsAdapter);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -66,14 +67,14 @@ public class HeadlineNewsFragment extends Fragment {
                 models.add(new NewsModel("GARA GARA CORONA STIKI DITUTUP", "SAKTI", "20.00 WIB"));
                 models.add(new NewsModel("GARA GARA CORONA STIKI DITUTUP", "SAKTI", "20.00 WIB"));
 
-                recyclerViewAdapter.isShimmer = false;
+                recyclerViewNewsAdapter.isShimmer = false;
 
                 parentShimmerLayout.stopShimmer();
                 parentShimmerLayout.setShimmer(null);
                 parentShimmerLayout.setVisibility(View.GONE);
 
-                Log.e("SHIMMER", String.valueOf(recyclerViewAdapter.isShimmer));
-                recyclerViewAdapter.notifyDataSetChanged();
+                Log.e("SHIMMER", String.valueOf(recyclerViewNewsAdapter.isShimmer));
+                recyclerViewNewsAdapter.notifyDataSetChanged();
             }
         }, 5000);
 

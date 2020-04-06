@@ -19,7 +19,7 @@ import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
+public class RecyclerViewNewsAdapter extends RecyclerView.Adapter<RecyclerViewNewsAdapter.ViewHolder>{
 
     ArrayList<NewsModel> models;
     Context context;
@@ -27,7 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public boolean isShimmer = true;
     int shimmerNumber = 5;
 
-    public RecyclerViewAdapter(ArrayList<NewsModel> models, Context context) {
+    public RecyclerViewNewsAdapter(ArrayList<NewsModel> models, Context context) {
         this.models = models;
         this.context = context;
     }
@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.shimmer_news_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_news_headline, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,14 +51,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.shimmerFrameLayout.stopShimmer();
             holder.shimmerFrameLayout.setShimmer(null);
 
-            holder.captionNews.setBackground(null);
-            holder.captionNews.setText(models.get(position).getCaptionNews());
+            holder.titleNews.setBackground(null);
+            holder.titleNews.setText(models.get(position).getTitleNews());
 
             holder.sourceNews.setBackground(null);
             holder.sourceNews.setText(models.get(position).getSourceNews());
 
-            holder.timeNews.setBackground(null);
-            holder.timeNews.setText(models.get(position).getTimeNews());
+            holder.dateNews.setBackground(null);
+            holder.dateNews.setText(models.get(position).getDateNews());
 
             holder.imageNews.setBackground(null);
             holder.imageNews.setImageDrawable(context.getDrawable(R.drawable.ic_android_black));
@@ -76,18 +76,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ShimmerFrameLayout shimmerFrameLayout;
-        TextView captionNews, sourceNews, timeNews;
+        TextView titleNews, sourceNews, dateNews;
         ImageView imageNews, saveNews;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             shimmerFrameLayout = itemView.findViewById(R.id.shimmerNewsLayout);
-            imageNews = itemView.findViewById(R.id.imageNews);
+            imageNews = itemView.findViewById(R.id.imageViewNews);
             saveNews = itemView.findViewById(R.id.saveNews);
-            captionNews = itemView.findViewById(R.id.captionNews);
-            sourceNews = itemView.findViewById(R.id.sourceNews);
-            timeNews = itemView.findViewById(R.id.timeNews);
+
+            titleNews = itemView.findViewById(R.id.textViewTitle);
+            sourceNews = itemView.findViewById(R.id.textViewSource);
+            dateNews = itemView.findViewById(R.id.textViewDate);
 
         }
     }

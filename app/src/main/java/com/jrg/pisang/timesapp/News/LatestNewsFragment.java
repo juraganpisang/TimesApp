@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewAdapter;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class LatestNewsFragment extends Fragment {
 
-    RecyclerViewAdapter recyclerViewAdapter;
+    RecyclerViewNewsAdapter recyclerViewNewsAdapter;
     RecyclerView recyclerView;
     ArrayList<NewsModel> models = new ArrayList<>();
     ShimmerFrameLayout parentShimmerLayout;
@@ -43,11 +43,11 @@ public class LatestNewsFragment extends Fragment {
         parentShimmerLayout = view.findViewById(R.id.parentShimmerLayout);
         recyclerView = view.findViewById(R.id.newsRecyclerView);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(models, getContext());
+        recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(models, getContext());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.hasFixedSize();
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(recyclerViewNewsAdapter);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -64,14 +64,14 @@ public class LatestNewsFragment extends Fragment {
                 models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
                 models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
 
-                recyclerViewAdapter.isShimmer = false;
+                recyclerViewNewsAdapter.isShimmer = false;
 
                 parentShimmerLayout.stopShimmer();
                 parentShimmerLayout.setShimmer(null);
                 parentShimmerLayout.setVisibility(View.GONE);
 
-                Log.e("SHIMMER", String.valueOf(recyclerViewAdapter.isShimmer));
-                recyclerViewAdapter.notifyDataSetChanged();
+                Log.e("SHIMMER", String.valueOf(recyclerViewNewsAdapter.isShimmer));
+                recyclerViewNewsAdapter.notifyDataSetChanged();
             }
         }, 5000);
 
