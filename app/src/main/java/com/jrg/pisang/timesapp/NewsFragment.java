@@ -31,6 +31,18 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
 
+        /////*     initialize view   */////
+        viewPager = view.findViewById(R.id.viewPager);
+
+        /////*     initialize ViewPager   */////
+        viewNewsAdapter = new NewsAdapter(getFragmentManager());
+
+        /////*     add adapter to ViewPager  */////
+        viewPager.setAdapter(viewNewsAdapter);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabRippleColor(null);
+
         return view;
     }
 

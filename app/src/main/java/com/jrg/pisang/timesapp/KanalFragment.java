@@ -38,18 +38,6 @@ public class KanalFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kanal, container, false);
 
-        /////*     initialize view   */////
-        viewPager = view.findViewById(R.id.viewPager);
-
-        /////*     initialize ViewPager   */////
-        viewNewsAdapter = new NewsAdapter(getFragmentManager());
-
-        /////*     add adapter to ViewPager  */////
-        viewPager.setAdapter(viewNewsAdapter);
-        tabLayout = view.findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabRippleColor(null);
-
 //        detail_berita = view.findViewById(R.id.detail_berita);
 //        detail_berita.setOnClickListener(new View.OnClickListener() {
 //            @Override
