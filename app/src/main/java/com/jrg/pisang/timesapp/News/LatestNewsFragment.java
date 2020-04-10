@@ -25,11 +25,6 @@ import java.util.ArrayList;
  */
 public class LatestNewsFragment extends Fragment {
 
-    RecyclerViewNewsAdapter recyclerViewNewsAdapter;
-    RecyclerView recyclerView;
-    ArrayList<NewsModel> models = new ArrayList<>();
-    ShimmerFrameLayout parentShimmerLayout;
-
     public LatestNewsFragment() {
         // Required empty public constructor
     }
@@ -40,41 +35,6 @@ public class LatestNewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_latest_news, container, false);
-        parentShimmerLayout = view.findViewById(R.id.parentShimmerLayout);
-        recyclerView = view.findViewById(R.id.newsRecyclerView);
-
-        recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(models, getContext());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.hasFixedSize();
-        recyclerView.setAdapter(recyclerViewNewsAdapter);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-                models.add(new NewsModel("STIKI SEK BAYAR SKS AE TELEK", "KeluhKesahMhs", "23.00 WIB"));
-
-                recyclerViewNewsAdapter.isShimmer = false;
-
-                parentShimmerLayout.stopShimmer();
-                parentShimmerLayout.setShimmer(null);
-                parentShimmerLayout.setVisibility(View.GONE);
-
-                Log.e("SHIMMER", String.valueOf(recyclerViewNewsAdapter.isShimmer));
-                recyclerViewNewsAdapter.notifyDataSetChanged();
-            }
-        }, 5000);
-
         return view;
     }
 

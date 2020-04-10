@@ -34,3 +34,4 @@ public class NewsModel {
         this.dateNews = dateNews;
     }
 }
+
