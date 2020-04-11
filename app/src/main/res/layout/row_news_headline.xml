@@ -18,16 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
-            app:cardElevation="2dp"
             app:cardUseCompatPadding="true">
 
             <ImageView
                 android:id="@+id/imageViewNews"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_android_black"
-                android:transitionName="imageViewNews" />
+                android:transitionName="img" />
 
             <ImageView
                 android:id="@+id/shadow_bottom"
@@ -36,17 +35,6 @@
                 android:layout_gravity="bottom"
                 android:src="@drawable/bottom_shadow" />
         </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textViewCaption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="Jalan protokol kota Jakarta tampak lengang Jelang pemberlakuan status PSBB pada Jumat, 10 April 2020. (Foto:Ainul Yaqin/Times Indonesia)"
-            android:textColor="@color/grey"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            android:layout_marginBottom="8dp"/>
 
         <View
             android:layout_width="match_parent"
@@ -62,7 +50,7 @@
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco."
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView

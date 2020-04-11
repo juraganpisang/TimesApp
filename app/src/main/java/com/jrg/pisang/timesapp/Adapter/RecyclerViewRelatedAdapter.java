@@ -2,7 +2,6 @@ package com.jrg.pisang.timesapp.Adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 
@@ -33,7 +31,7 @@ public class RecyclerViewRelatedAdapter extends RecyclerView.Adapter<RecyclerVie
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_news_related, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_news_popular, parent, false);
         return new ViewHolder(view);
     }
 
