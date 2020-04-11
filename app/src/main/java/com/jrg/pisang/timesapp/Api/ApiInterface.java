@@ -18,4 +18,14 @@ public interface ApiInterface {
             @Query("offset") int offset,
             @Query("limit") int limit
     );
+
+    @GET("all_news/")
+    Call<Headline> getNewsRelated(
+            @Query("key") String key,
+            @Query("news_type") String news_type,
+            @Query("news_id") int news_id,
+            @Query("title") String title,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
 }

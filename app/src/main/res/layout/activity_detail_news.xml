@@ -7,6 +7,50 @@
     android:orientation="vertical"
     tools:context=".News.DetailNewsActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/detailShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/placeholder_news_detail" />
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/relatedShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/placeholder_news_related" />
+
+                <include layout="@layout/placeholder_news_related" />
+
+                <include layout="@layout/placeholder_news_related" />
+
+                <include layout="@layout/placeholder_news_related" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </LinearLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -72,7 +116,7 @@
 
                 <LinearLayout
                     android:id="@+id/title_appbar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:orientation="vertical">
@@ -116,7 +160,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:orientation="vertical">
 
             <TextView
@@ -125,8 +169,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
                 android:text="Jalan protokol kota Jakarta tampak lengang Jelang pemberlakuan status PSBB pada Jumat, 10 April 2020. (Foto:Ainul Yaqin/Times Indonesia)"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
@@ -135,7 +179,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="6dp"
                 android:background="@color/light_grey" />
 
             <LinearLayout
@@ -190,10 +234,9 @@ quis nostrud exercitation ullamco."
 
             </LinearLayout>
 
-
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
+                android:layout_height="1dp"
                 android:background="@color/background" />
 
             <LinearLayout
@@ -201,31 +244,16 @@ quis nostrud exercitation ullamco."
                 android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="10dp"
+                android:paddingRight="8dp">
 
                 <WebView
                     android:id="@+id/webViewContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-<!--                <TextView-->
-<!--                    android:id="@+id/textViewContent"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod-->
-<!--tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,-->
-<!--quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo-->
-<!--consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse-->
-<!--cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non-->
-<!--proident, sunt in culpa qui officia deserunt mollit anim id est laborum."-->
-<!--                    android:textSize="20sp" />-->
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="@color/background" />
 
             <!--            SOSMED -->
             <LinearLayout
@@ -233,47 +261,54 @@ quis nostrud exercitation ullamco."
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="14dp">
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_android_black" />
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_android_black" />
 
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_android_black" />
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_android_black" />
 
             </LinearLayout>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/background" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
                 android:background="#ffffff"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_marginLeft="14dp"
                     android:text="RELATED ARTICLES"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp"
@@ -282,14 +317,14 @@ quis nostrud exercitation ullamco."
                 <View
                     android:layout_width="90dp"
                     android:layout_height="4dp"
+                    android:layout_marginLeft="14dp"
                     android:layout_marginBottom="10dp"
                     android:background="@color/colorPrimary" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/relatedRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

@@ -2,34 +2,55 @@ package com.jrg.pisang.timesapp.News;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewRelatedAdapter;
+import com.jrg.pisang.timesapp.Api.ApiClient;
+import com.jrg.pisang.timesapp.Api.ApiInterface;
+import com.jrg.pisang.timesapp.Model.Data;
+import com.jrg.pisang.timesapp.Model.Headline;
 import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class DetailNewsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
-    RecyclerViewRelatedAdapter recyclerViewRelatedAdapter;
-    RecyclerView recyclerView;
-    ArrayList<NewsModel> models = new ArrayList<>();
+    public static final String key = "NyEIwDL51eeaoVhYGPaF";
+
+    RecyclerViewPopularAdapter recyclerViewPopularAdapter;
+    RecyclerView relatedRecyclerView;
+    private List<Data> relateds = new ArrayList<>();
+
+    ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
     private ImageView imageView;
     private TextView appbar_title, appbar_subtile, caption, title, source, date;
@@ -38,7 +59,9 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     private LinearLayout titleAppbar;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl;
+    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl, mId, mTags, tempTags;
+    private String[] separatorTags;
+    private int mIdNews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +72,9 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        relatedShimmerLayout = findViewById(R.id.relatedShimmerLayout);
+        detailShimmerLayout = findViewById(R.id.detailShimmerLayout);
 
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("");
@@ -66,7 +92,27 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         date = findViewById(R.id.textViewDate);
         content = findViewById(R.id.webViewContent);
 
+        relatedRecyclerView = findViewById(R.id.relatedRecyclerView);
+
+        relatedShimmerLayout.startShimmer();
+        detailShimmerLayout.startShimmer();
+
+        setRecyclerView();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadJSON();
+                setDataIntent();
+            }
+        }, 2000);
+
+    }
+
+    private void setDataIntent() {
+
         Intent intent = getIntent();
+        mId = intent.getStringExtra("id");
         mTitle = intent.getStringExtra("title");
         mCaption = intent.getStringExtra("caption");
         mImage = intent.getStringExtra("image");
@@ -74,36 +120,106 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         mDate = intent.getStringExtra("date");
         mSource = intent.getStringExtra("source");
         mUrl = intent.getStringExtra("url");
+        tempTags = intent.getStringExtra("tags");
 
+        separatorTags = tempTags.split(",");
+        mTags = separatorTags[0].replaceAll(" ", "+");
+
+        mIdNews = Integer.valueOf(mId);
+
+        Log.e("TAGSE", mTags);
+        Log.e("IDNE", mId);
+        //call intent
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.error(Utils.getRandomDrawbleColor());
 
-        Glide.with(this)
+        Glide.with(DetailNewsActivity.this)
                 .load(mImage)
                 .apply(requestOptions)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
 
         appbar_title.setText(mTitle);
-        appbar_subtile.setText(mUrl);
+        appbar_subtile.setText("timesindonesia.com" + mUrl);
         title.setText(mTitle);
         date.setText(" \u2022 " + mDate);
         caption.setText(mCaption);
         content.getSettings().getJavaScriptEnabled();
         content.loadData(String.format(mContent), "text/html", "utf-8");
-
-        if ((mSource.equalsIgnoreCase(null)) || (mSource.equalsIgnoreCase(""))) {
-            mSource = "";
-        }
         source.setText(mSource);
+    }
 
 
-        recyclerView = findViewById(R.id.relatedRecyclerView);
-        recyclerViewRelatedAdapter = new RecyclerViewRelatedAdapter(models, this);
+    private void setRecyclerView() {
+        showRelated();
+    }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.hasFixedSize();
-        recyclerView.setAdapter(recyclerViewRelatedAdapter);
+    private void showRelated() {
+        relatedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        relatedRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        relatedRecyclerView.setNestedScrollingEnabled(false);
+        relatedRecyclerView.setAdapter(recyclerViewPopularAdapter);
+    }
+
+    private void initListenerRelated() {
+        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailNewsActivity.this, DetailNewsActivity.class);
+
+                Data data = relateds.get(position);
+                intent.putExtra("id", data.getNews_id());
+                intent.putExtra("title", data.getNews_title());
+                intent.putExtra("caption", data.getNews_caption());
+                intent.putExtra("image", data.getNews_image_new());
+                intent.putExtra("content", data.getNews_content());
+                intent.putExtra("date", data.getNews_datepub());
+                intent.putExtra("source", data.getNews_writer());
+                intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
+
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void loadJSON() {
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Headline> callRelated;
+
+        callRelated = apiInterface.getNewsRelated(key, "related_new", mIdNews, mTags, 0, 10);
+        callRelated.enqueue(new Callback<Headline>() {
+            @Override
+            public void onResponse(Call<Headline> call, Response<Headline> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    if (!relateds.isEmpty()) {
+                        relateds.clear();
+                    }
+
+                    relateds = response.body().getData();
+                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(relateds, DetailNewsActivity.this);
+                    relatedRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                    recyclerViewPopularAdapter.notifyDataSetChanged();
+
+                    initListenerRelated();
+
+                    detailShimmerLayout.stopShimmer();
+                    detailShimmerLayout.setVisibility(View.GONE);
+                    relatedShimmerLayout.stopShimmer();
+                    relatedShimmerLayout.setVisibility(View.GONE);
+
+                } else {
+                    Toast.makeText(DetailNewsActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Headline> call, Throwable t) {
+                Toast.makeText(DetailNewsActivity.this, "gagal", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

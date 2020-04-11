@@ -80,7 +80,7 @@ public class RecyclerViewNewsAdapter extends RecyclerView.Adapter<RecyclerViewNe
         holder.title.setText(model.getNews_title());
         holder.description.setText(model.getNews_description());
         holder.news_writer.setText(model.getNews_writer());
-        holder.news_datepub.setText("\u2022 "+model.getNews_datepub());
+        holder.news_datepub.setText("\u2022 "+Utils.DateToTimeFormat(model.getNews_datepub()));
     }
 
     @Override

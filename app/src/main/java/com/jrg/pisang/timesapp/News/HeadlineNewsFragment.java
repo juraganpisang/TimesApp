@@ -15,13 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewTrendingAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Model.Data;
@@ -126,6 +124,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
                 Data data = datas.get(position);
+                intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
                 intent.putExtra("image", data.getNews_image_new());
@@ -133,6 +132,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 intent.putExtra("date", data.getNews_datepub());
                 intent.putExtra("source", data.getNews_writer());
                 intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
 
                 startActivity(intent);
             }
@@ -146,6 +146,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
                 Data data = populars.get(position);
+                intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
                 intent.putExtra("image", data.getNews_image_new());
@@ -153,6 +154,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 intent.putExtra("date", data.getNews_datepub());
                 intent.putExtra("source", data.getNews_writer());
                 intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
 
                 startActivity(intent);
             }
@@ -166,6 +168,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
                 Data data = trendings.get(position);
+                intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
                 intent.putExtra("image", data.getNews_image_new());
@@ -173,6 +176,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                 intent.putExtra("date", data.getNews_datepub());
                 intent.putExtra("source", data.getNews_writer());
                 intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
 
                 startActivity(intent);
             }

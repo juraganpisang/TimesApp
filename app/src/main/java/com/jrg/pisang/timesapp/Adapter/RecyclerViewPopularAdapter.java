@@ -74,7 +74,7 @@ public class RecyclerViewPopularAdapter extends RecyclerView.Adapter<RecyclerVie
 
         holder.title.setText(model.getNews_title());
         holder.news_writer.setText(model.getNews_writer());
-        holder.news_datepub.setText(model.getNews_datepub());
+        holder.news_datepub.setText(Utils.DateToTimeFormat(model.getNews_datepub()));
     }
 
     @Override

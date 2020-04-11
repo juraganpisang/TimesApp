@@ -34,7 +34,7 @@ public class Utils {
         PrettyTime p = new PrettyTime(new Locale(getCountry()));
         String isTime = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
                     Locale.ENGLISH);
             Date date = sdf.parse(oldstringDate);
             isTime = p.format(date);
