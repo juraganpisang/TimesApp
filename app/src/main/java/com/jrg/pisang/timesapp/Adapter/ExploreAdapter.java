@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.jrg.pisang.timesapp.News.HeadlineNewsFragment;
-import com.jrg.pisang.timesapp.News.LatestNewsFragment;
+import com.jrg.pisang.timesapp.Explore.FokusExploreFragment;
+import com.jrg.pisang.timesapp.Explore.KanalExploreFragment;
 
-public class KanalAdapter extends FragmentPagerAdapter {
 
-    public KanalAdapter(@NonNull FragmentManager fm) {
+public class ExploreAdapter extends FragmentPagerAdapter {
+
+    public ExploreAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 
@@ -18,9 +19,9 @@ public class KanalAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new HeadlineNewsFragment();
+                return new KanalExploreFragment();
             case 1:
-                return new LatestNewsFragment();
+                return new FokusExploreFragment();
             default:
                 return null;
         }
@@ -35,9 +36,9 @@ public class KanalAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return " HEADLINE ";
+                return " KANAL ";
             case 1:
-                return " LATEST NEWS ";
+                return " FOKUS ";
             default:
                 return null;
         }

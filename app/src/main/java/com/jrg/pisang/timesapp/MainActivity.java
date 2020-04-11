@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBar actionBar;
 
     final Fragment fragment0 = new NewsFragment();
-    final Fragment fragment1 = new KanalFragment();
+    final Fragment fragment1 = new ExploreFragment();
     final Fragment fragment2 = new MediaFragment();
     final Fragment fragment3 = new SettingFragment();
 
