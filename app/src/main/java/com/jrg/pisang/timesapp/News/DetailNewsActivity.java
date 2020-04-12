@@ -2,6 +2,7 @@ package com.jrg.pisang.timesapp.News;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +64,8 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     private String[] separatorTags;
     private int mIdNews;
 
+    private NestedScrollView nestedScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("");
 
+        nestedScrollView = findViewById(R.id.detailNSV);
         appBarLayout = findViewById(R.id.appbar);
         appBarLayout.addOnOffsetChangedListener(this);
         titleAppbar = findViewById(R.id.title_appbar);
@@ -143,9 +147,10 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         appbar_subtile.setText("timesindonesia.com" + mUrl);
         title.setText(mTitle);
         date.setText(" \u2022 " + mDate);
+        Log.e("CONETN", mContent);
         caption.setText(mCaption);
         content.getSettings().getJavaScriptEnabled();
-        content.loadData(String.format(mContent), "text/html", "utf-8");
+        content.loadData(mContent, "text/html", "utf-8");
         source.setText(mSource);
     }
 
@@ -208,6 +213,8 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
                     detailShimmerLayout.setVisibility(View.GONE);
                     relatedShimmerLayout.stopShimmer();
                     relatedShimmerLayout.setVisibility(View.GONE);
+                    appBarLayout.setVisibility(View.VISIBLE);
+                    nestedScrollView.setVisibility(View.VISIBLE);
 
                 } else {
                     Toast.makeText(DetailNewsActivity.this, "No Result!", Toast.LENGTH_SHORT).show();

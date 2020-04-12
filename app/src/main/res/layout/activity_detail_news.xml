@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".News.DetailNewsActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".News.DetailNewsActivity"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,6 +54,7 @@
     </LinearLayout>
 
     <com.google.android.material.appbar.AppBarLayout
+        android:visibility="gone"
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -71,6 +74,7 @@
                 android:id="@+id/backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 android:transitionName="img"
                 app:layout_collapseMode="parallax"
@@ -154,8 +158,12 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/detailNSV"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -195,9 +203,7 @@
                     android:id="@+id/textViewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco."
+                    android:text="Lorem ipsum dolor sit amet"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -227,7 +233,7 @@ quis nostrud exercitation ullamco."
                     android:id="@+id/textViewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="asdasdasdasd"
+                    android:text="12 Desmber 2012"
                     android:textColor="#BDBDBD"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -261,6 +267,7 @@ quis nostrud exercitation ullamco."
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:padding="14dp">
 
                 <ImageView
@@ -322,9 +329,13 @@ quis nostrud exercitation ullamco."
                     android:background="@color/colorPrimary" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginBottom="30dp"
                     android:id="@+id/relatedRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:scrollbarSize="1dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
 
@@ -332,4 +343,4 @@ quis nostrud exercitation ullamco."
 
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
