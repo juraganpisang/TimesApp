@@ -68,6 +68,7 @@
                         android:background="@color/light_grey" />
 
                     <LinearLayout
+                        android:id="@+id/populerLL"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginLeft="14dp"
@@ -144,6 +145,7 @@
                         android:background="@color/light_grey" />
 
                     <LinearLayout
+                        android:id="@+id/trendingLL"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginLeft="14dp"

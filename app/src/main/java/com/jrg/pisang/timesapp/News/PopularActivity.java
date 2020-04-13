@@ -1,20 +1,15 @@
 package com.jrg.pisang.timesapp.News;
 
-
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -23,7 +18,6 @@ import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Model.Data;
 import com.jrg.pisang.timesapp.Model.Headline;
-import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -33,41 +27,30 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+public class PopularActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private RecyclerViewNewsAdapter recyclerViewNewsAdapter;
 
-    private RecyclerView latestRecyclerView;
+    private RecyclerView popularRecyclerView;
 
-    private List<Data> latests = new ArrayList<>();
+    private List<Data> populars = new ArrayList<>();
 
-    private ShimmerFrameLayout latestShimmerLayout;
+    private ShimmerFrameLayout popularShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    public LatestNewsFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_latest_news, container, false);
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_popular);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
 
-        latestShimmerLayout = view.findViewById(R.id.latestShimmerLayout);
+        popularRecyclerView = findViewById(R.id.popularRecyclerView);
+        popularShimmerLayout = findViewById(R.id.popularShimmerLayout);
 
-        latestRecyclerView = view.findViewById(R.id.latestRecyclerView);
-
-        latestShimmerLayout.startShimmer();
+        popularShimmerLayout.startShimmer();
 
         setRecyclerView();
 
@@ -77,28 +60,26 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
                 loadJSON();
             }
         }, 2000);
-        return view;
     }
-
     private void setRecyclerView() {
         showLatest();
     }
 
     private void showLatest() {
-        latestRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        latestRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        latestRecyclerView.setNestedScrollingEnabled(false);
-        latestRecyclerView.setAdapter(recyclerViewNewsAdapter);
+        popularRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        popularRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        popularRecyclerView.setNestedScrollingEnabled(false);
+        popularRecyclerView.setAdapter(recyclerViewNewsAdapter);
     }
 
 
-    private void initListenerLatest() {
+    private void initListenerPopular() {
         recyclerViewNewsAdapter.setOnItemClickListener(new RecyclerViewNewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), DetailNewsActivity.class);
+                Intent intent = new Intent(PopularActivity.this, DetailNewsActivity.class);
 
-                Data data = latests.get(position);
+                Data data = populars.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -118,31 +99,31 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Headline> callLatest;
+        Call<Headline> callPopular;
 
-        callLatest = apiInterface.getNewsHeadline(key, "all", 0, 20);
-        callLatest.enqueue(new Callback<Headline>() {
+        callPopular = apiInterface.getNewsHeadline(key, "populer", 0, 30);
+        callPopular.enqueue(new Callback<Headline>() {
             @Override
             public void onResponse(Call<Headline> call, Response<Headline> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!latests.isEmpty()) {
-                        latests.clear();
+                    if (!populars.isEmpty()) {
+                        populars.clear();
                     }
 
-                    latests = response.body().getData();
-                    recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(latests, getContext());
-                    latestRecyclerView.setAdapter(recyclerViewNewsAdapter);
+                    populars = response.body().getData();
+                    recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(populars, getApplicationContext());
+                    popularRecyclerView.setAdapter(recyclerViewNewsAdapter);
                     recyclerViewNewsAdapter.notifyDataSetChanged();
 
-                    initListenerLatest();
+                    initListenerPopular();
                     swipeRefreshLayout.setRefreshing(false);
 
-                    latestShimmerLayout.stopShimmer();
-                    latestShimmerLayout.setVisibility(View.GONE);
+                    popularShimmerLayout.stopShimmer();
+                    popularShimmerLayout.setVisibility(View.GONE);
 
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), "No Result!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -157,14 +138,19 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
     public void onResume() {
         super.onResume();
         setRecyclerView();
-        latestShimmerLayout.startShimmer();
+        popularShimmerLayout.startShimmer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        latestShimmerLayout.stopShimmer();
-        latestShimmerLayout.setVisibility(View.GONE);
+        popularShimmerLayout.stopShimmer();
+        popularShimmerLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

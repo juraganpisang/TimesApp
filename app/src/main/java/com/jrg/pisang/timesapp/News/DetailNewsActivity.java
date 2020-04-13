@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,6 +36,8 @@ import com.jrg.pisang.timesapp.Model.NewsModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +50,11 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
 
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
-    RecyclerViewPopularAdapter recyclerViewPopularAdapter;
-    RecyclerView relatedRecyclerView;
+    private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
+    private RecyclerView relatedRecyclerView;
     private List<Data> relateds = new ArrayList<>();
 
-    ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
+    private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
     private ImageView imageView;
     private TextView appbar_title, appbar_subtile, caption, title, source, date;
@@ -60,7 +63,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     private LinearLayout titleAppbar;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl, mId, mTags, tempTags;
+    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl, mId, tempTags, mTags;
     private String[] separatorTags;
     private int mIdNews;
 
@@ -101,20 +104,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         relatedShimmerLayout.startShimmer();
         detailShimmerLayout.startShimmer();
 
-        setRecyclerView();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-                setDataIntent();
-            }
-        }, 2000);
-
-    }
-
-    private void setDataIntent() {
-
+        //get intent
         Intent intent = getIntent();
         mId = intent.getStringExtra("id");
         mTitle = intent.getStringExtra("title");
@@ -127,12 +117,10 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         tempTags = intent.getStringExtra("tags");
 
         separatorTags = tempTags.split(",");
-        mTags = separatorTags[0].replaceAll(" ", "+");
+        mTags = separatorTags[0];
 
         mIdNews = Integer.valueOf(mId);
 
-        Log.e("TAGSE", mTags);
-        Log.e("IDNE", mId);
         //call intent
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.error(Utils.getRandomDrawbleColor());
@@ -147,13 +135,21 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         appbar_subtile.setText("timesindonesia.com" + mUrl);
         title.setText(mTitle);
         date.setText(" \u2022 " + mDate);
-        Log.e("CONETN", mContent);
         caption.setText(mCaption);
         content.getSettings().getJavaScriptEnabled();
         content.loadData(mContent, "text/html", "utf-8");
         source.setText(mSource);
-    }
 
+        setRecyclerView();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadJSON();
+            }
+        }, 2000);
+
+    }
 
     private void setRecyclerView() {
         showRelated();
@@ -253,6 +249,23 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
             titleAppbar.setVisibility(View.GONE);
             isHideToolbar = !isHideToolbar;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setRecyclerView();
+        detailShimmerLayout.startShimmer();
+        relatedShimmerLayout.startShimmer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detailShimmerLayout.stopShimmer();
+        detailShimmerLayout.setVisibility(View.GONE);
+        relatedShimmerLayout.stopShimmer();
+        relatedShimmerLayout.setVisibility(View.GONE);
     }
 
     //

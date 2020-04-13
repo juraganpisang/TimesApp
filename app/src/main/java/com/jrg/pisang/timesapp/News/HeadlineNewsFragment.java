@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -49,8 +50,10 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     private List<Data> populars = new ArrayList<>();
     private List<Data> trendings = new ArrayList<>();
 
-    ShimmerFrameLayout headlineShimmerLayout, subheadlineShimmerLayout, trendingShimmerLayout;
+    private ShimmerFrameLayout headlineShimmerLayout, subheadlineShimmerLayout, trendingShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private LinearLayout populerLL, trendingLL;
 
     public HeadlineNewsFragment() {
         // Required empty public constructor
@@ -74,6 +77,24 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
         popularRecyclerView = view.findViewById(R.id.popularRecyclerView);
         trendingRecyclerView = view.findViewById(R.id.trendingRecyclerView);
 
+        populerLL = view.findViewById(R.id.populerLL);
+        trendingLL = view.findViewById(R.id.trendingLL);
+
+        populerLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), PopularActivity.class);
+                startActivity(i);
+            }
+        });
+
+        trendingLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), PopularActivity.class);
+                startActivity(i);
+            }
+        });
         subheadlineShimmerLayout.startShimmer();
         headlineShimmerLayout.startShimmer();
         trendingShimmerLayout.startShimmer();
@@ -289,7 +310,6 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onResume() {
         super.onResume();
-        setRecyclerView();
         subheadlineShimmerLayout.startShimmer();
         headlineShimmerLayout.startShimmer();
     }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".News.LatestNewsFragment">
+    tools:context=".News.PopularActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -16,14 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/latestShimmerLayout"
+                    android:id="@+id/popularShimmerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -46,7 +45,7 @@
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/latestRecyclerView"
+                    android:id="@+id/popularRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbarSize="1dp"
@@ -57,4 +56,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
