@@ -46,4 +46,7 @@ dependencies {
 
 //Times Formater
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+
+    //image slider
+    implementation 'com.github.smarteist:autoimageslider:1.3.5'
 }
