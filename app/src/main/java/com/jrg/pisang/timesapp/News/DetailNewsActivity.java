@@ -132,7 +132,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
                 .into(imageView);
 
         appbar_title.setText(mTitle);
-        appbar_subtile.setText("timesindonesia.com" + mUrl);
+        appbar_subtile.setText("timesindonesia.co.id" + mUrl);
         title.setText(mTitle);
         date.setText(" \u2022 " + mDate);
         caption.setText(mCaption);

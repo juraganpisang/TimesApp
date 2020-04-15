@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
+import com.jrg.pisang.timesapp.EKoran.EkoranFragment;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment fragment1 = new ExploreFragment();
     final Fragment fragment2 = new MediaFragment();
     final Fragment fragment3 = new SettingFragment();
+    final Fragment fragment4 = new EkoranFragment();
 
     public final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.space);
 
+        fragmentManager.beginTransaction().add(R.id.fragment_container, fragment4, "4").hide(fragment4).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment3, "3").hide(fragment3).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment2, "2").hide(fragment2).commit();
         fragmentManager.beginTransaction().add(R.id.fragment_container, fragment1, "1").hide(fragment1).commit();
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
             public void onCentreButtonClick() {
-                Toast.makeText(MainActivity.this,"onCentreButtonClick", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction().hide(active).show(fragment4).commit();
+                active = fragment4;
                 navigationView.setCentreButtonSelectable(true);
             }
 
@@ -80,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 //                        actionBar.setTitle("SETTING");
                         break;
                 }
-//                Toast.makeText(MainActivity.this, itemIndex + " " + itemName, Toast.LENGTH_SHORT).show();
             }
 
             @Override

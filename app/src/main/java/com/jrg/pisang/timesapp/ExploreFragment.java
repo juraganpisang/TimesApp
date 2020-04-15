@@ -35,17 +35,6 @@ public class ExploreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        /////*     initialize view   */////
-        viewPager = view.findViewById(R.id.viewPagerExplore);
-
-        /////*     initialize ViewPager   */////
-        exploreAdapter = new ExploreAdapter(getFragmentManager());
-
-        /////*     add adapter to ViewPager  */////
-        viewPager.setAdapter(exploreAdapter);
-        tabLayout = view.findViewById(R.id.tabLayoutExplore);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabRippleColor(null);
         return view;
     }
 }

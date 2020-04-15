@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Headline {
+public class Ekoran {
 
     @SerializedName("status")
     @Expose
@@ -13,7 +13,7 @@ public class Headline {
 
     @SerializedName("data")
     @Expose
-    private List<Data> data;
+    private List<DataKoran> data;
 
     public String getStatus() {
         return status;
@@ -23,11 +23,11 @@ public class Headline {
         this.status = status;
     }
 
-    public List<Data> getData() {
+    public List<DataKoran> getData() {
         return data;
     }
 
-    public void setData(List<Data> data) {
+    public void setData(List<DataKoran> data) {
         this.data = data;
     }
 }

@@ -1,9 +1,15 @@
 package com.jrg.pisang.timesapp.Api;
 
+import com.jrg.pisang.timesapp.Model.DataKoran;
+import com.jrg.pisang.timesapp.Model.DataKoranDetail;
+import com.jrg.pisang.timesapp.Model.Ekoran;
 import com.jrg.pisang.timesapp.Model.Headline;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -28,4 +34,21 @@ public interface ApiInterface {
             @Query("offset") int offset,
             @Query("limit") int limit
     );
+
+//    https://api.timesindonesia.co.id/v1/all_ekoran/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=10
+    //ekoran
+    @GET("all_ekoran/")
+    Call<Ekoran> getEKoran(
+            @Query("key") String key,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
+
+    //Koran_detail/1249
+    @GET("koran_detail/{id}")
+    Call<DataKoranDetail> getEKoranDetail(
+            @Path(value = "id", encoded = true) int id,
+            @Query("key") String key
+    );
+
 }
