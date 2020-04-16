@@ -18,9 +18,9 @@ import com.jrg.pisang.timesapp.Adapter.NewsAdapter;
  */
 public class NewsFragment extends Fragment {
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    NewsAdapter viewNewsAdapter;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private NewsAdapter viewNewsAdapter;
 
     public NewsFragment() {
         // Required empty public constructor

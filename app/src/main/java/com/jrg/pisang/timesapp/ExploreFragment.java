@@ -4,25 +4,46 @@ package com.jrg.pisang.timesapp;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
-import com.jrg.pisang.timesapp.Adapter.ExploreAdapter;
-import com.jrg.pisang.timesapp.Adapter.NewsAdapter;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewFocusAdapter;
+import com.jrg.pisang.timesapp.Api.ApiClient;
+import com.jrg.pisang.timesapp.Api.ApiInterface;
+import com.jrg.pisang.timesapp.Model.DataFokus;
+import com.jrg.pisang.timesapp.Model.Fokus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExploreFragment extends Fragment {
+public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    ExploreAdapter exploreAdapter;
+    public static final String key = "NyEIwDL51eeaoVhYGPaF";
+
+    private RecyclerViewFocusAdapter recyclerViewFocusAdapter;
+
+    private RecyclerView fokusRecyclerView;
+
+    private List<DataFokus> fokus = new ArrayList<>();
+
+    private ShimmerFrameLayout fokusShimmerLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -35,6 +56,105 @@ public class ExploreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+
+        fokusShimmerLayout = view.findViewById(R.id.fokusShimmerLayout);
+
+        fokusRecyclerView = view.findViewById(R.id.fokusRecyclerView);
+
+        fokusShimmerLayout.startShimmer();
+
+        setRecyclerView();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadJSON();
+            }
+        }, 2000);
+
         return view;
     }
+
+
+    private void setRecyclerView() {
+        showFocus();
+    }
+    private void showFocus() {
+        fokusRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+//        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        ekoranRecyclerView.setNestedScrollingEnabled(false);
+        fokusRecyclerView.setAdapter(recyclerViewFocusAdapter);
+        fokusRecyclerView.setHasFixedSize(true);
+    }
+
+//    private void initListenerFokus() {
+//        recyclerViewFocusAdapter.setOnItemClickListener(new RecyclerViewFocusAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Intent intent = new Intent(getContext(), DetailEkoranActivity.class);
+//
+//                DataFokus data = fokus.get(position);
+//                intent.putExtra("id", data.getFocnews_id());
+//                startActivity(intent);
+//            }
+//        });
+//    }
+
+    public void loadJSON() {
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Fokus> callFokus;
+
+        callFokus = apiInterface.getFokus(key, 0, 15);
+        callFokus.enqueue(new Callback<Fokus>() {
+            @Override
+            public void onResponse(Call<Fokus> call, Response<Fokus> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    if (!fokus.isEmpty()) {
+                        fokus.clear();
+                    }
+
+                    fokus = response.body().getData();
+                    recyclerViewFocusAdapter = new RecyclerViewFocusAdapter(fokus, getContext());
+                    fokusRecyclerView.setAdapter(recyclerViewFocusAdapter);
+                    recyclerViewFocusAdapter.notifyDataSetChanged();
+
+                    //initListenerEkoran();
+
+                    swipeRefreshLayout.setRefreshing(false);
+                    fokusShimmerLayout.stopShimmer();
+                    fokusShimmerLayout.setVisibility(View.GONE);
+
+                } else {
+                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Fokus> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fokusShimmerLayout.startShimmer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        fokusShimmerLayout.stopShimmer();
+        fokusShimmerLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadJSON();
+    }
+
 }
