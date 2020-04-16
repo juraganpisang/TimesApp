@@ -1,11 +1,10 @@
 package com.jrg.pisang.timesapp.Api;
 
-import com.jrg.pisang.timesapp.Model.DataKoran;
 import com.jrg.pisang.timesapp.Model.DataKoranDetail;
 import com.jrg.pisang.timesapp.Model.Ekoran;
+import com.jrg.pisang.timesapp.Model.Fokus;
 import com.jrg.pisang.timesapp.Model.Headline;
-
-import java.util.List;
+import com.jrg.pisang.timesapp.Model.DataFokus;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -51,4 +50,12 @@ public interface ApiInterface {
             @Query("key") String key
     );
 
+    //https://api.timesindonesia.co.id/v1/list_focus/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=5
+    //fokus
+    @GET("list_focus/")
+    Call<Fokus> getFokus(
+            @Query("key") String key,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
 }
