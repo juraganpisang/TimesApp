@@ -61,9 +61,8 @@ public class EkoranSliderAdapter extends SliderViewAdapter<EkoranSliderAdapter.S
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
         String image = dataImg.get(position);
-
+        
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(Utils.getRandomDrawbleColor());
         requestOptions.error(Utils.getRandomDrawbleColor());
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
         requestOptions.fitCenter();
