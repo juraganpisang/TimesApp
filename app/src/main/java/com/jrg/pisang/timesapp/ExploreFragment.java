@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-
         fokusShimmerLayout = view.findViewById(R.id.fokusShimmerLayout);
 
         fokusRecyclerView = view.findViewById(R.id.fokusRecyclerView);
@@ -67,7 +67,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         fokusShimmerLayout.startShimmer();
 
         setRecyclerView();
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -115,7 +114,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     if (!fokus.isEmpty()) {
                         fokus.clear();
                     }
-
+                    Log.e("error1", "1");
                     fokus = response.body().getData();
                     recyclerViewFocusAdapter = new RecyclerViewFocusAdapter(fokus, getContext());
                     fokusRecyclerView.setAdapter(recyclerViewFocusAdapter);
