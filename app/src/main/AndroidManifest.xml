@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EKoran.DetailEkoranActivity"></activity>
+        <activity android:name=".Explore.DetailFokusActivity"></activity>
+        <activity android:name=".EKoran.DetailEkoranActivity" />
         <activity android:name=".News.PopularActivity" />
         <activity
             android:name=".News.DetailNewsActivity"

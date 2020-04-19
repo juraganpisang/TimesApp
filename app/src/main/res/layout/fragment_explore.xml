@@ -19,9 +19,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:background="@color/white">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,7 +124,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="6dp"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -154,11 +154,17 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <include layout="@layout/placeholder_fokus" />
+                        <include layout="@layout/placeholder_explore_fokus" />
 
-                        <include layout="@layout/placeholder_fokus" />
+                        <include layout="@layout/placeholder_explore_fokus" />
 
-                        <include layout="@layout/placeholder_fokus" />
+                        <include layout="@layout/placeholder_explore_fokus" />
+
+                        <include layout="@layout/placeholder_explore_fokus" />
+
+                        <include layout="@layout/placeholder_explore_fokus" />
+
+                        <include layout="@layout/placeholder_explore_fokus" />
 
                     </LinearLayout>
 
@@ -168,9 +174,9 @@
                     android:id="@+id/fokusRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:scrollbars="vertical"
                     android:scrollbarSize="1dp"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbars="vertical" />
+                    android:scrollbarStyle="insideInset"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -190,10 +196,9 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!--        </LinearLayout>-->
-
-
 
 </LinearLayout>

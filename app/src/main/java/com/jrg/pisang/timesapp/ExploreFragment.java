@@ -1,23 +1,28 @@
 package com.jrg.pisang.timesapp;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewFocusAdapter;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewFokusAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
+import com.jrg.pisang.timesapp.Explore.DetailFokusActivity;
 import com.jrg.pisang.timesapp.Model.DataFokus;
 import com.jrg.pisang.timesapp.Model.Fokus;
 
@@ -36,7 +41,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
-    private RecyclerViewFocusAdapter recyclerViewFocusAdapter;
+    private RecyclerViewFokusAdapter recyclerViewFokusAdapter;
 
     private RecyclerView fokusRecyclerView;
 
@@ -82,26 +87,26 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private void setRecyclerView() {
         showFocus();
     }
+
     private void showFocus() {
-        fokusRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        ekoranRecyclerView.setNestedScrollingEnabled(false);
-        fokusRecyclerView.setAdapter(recyclerViewFocusAdapter);
-        fokusRecyclerView.setHasFixedSize(true);
+        fokusRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        fokusRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        fokusRecyclerView.setNestedScrollingEnabled(false);
+        fokusRecyclerView.setAdapter(recyclerViewFokusAdapter);
     }
 
-//    private void initListenerFokus() {
-//        recyclerViewFocusAdapter.setOnItemClickListener(new RecyclerViewFocusAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(getContext(), DetailEkoranActivity.class);
-//
-//                DataFokus data = fokus.get(position);
-//                intent.putExtra("id", data.getFocnews_id());
-//                startActivity(intent);
-//            }
-//        });
-//    }
+    private void initListenerFokus() {
+        recyclerViewFokusAdapter.setOnItemClickListener(new RecyclerViewFokusAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getContext(), DetailFokusActivity.class);
+
+                DataFokus data = fokus.get(position);
+                intent.putExtra("id", data.getFocnews_id());
+                startActivity(intent);
+            }
+        });
+    }
 
     public void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
@@ -112,22 +117,22 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public void onResponse(Call<Fokus> call, Response<Fokus> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!fokus.isEmpty()) {
-                        fokus.clear();
-                    }
 
                     fokus = response.body().getData();
-                    recyclerViewFocusAdapter = new RecyclerViewFocusAdapter(fokus, getContext());
-                    fokusRecyclerView.setAdapter(recyclerViewFocusAdapter);
-                    recyclerViewFocusAdapter.notifyDataSetChanged();
+                    recyclerViewFokusAdapter = new RecyclerViewFokusAdapter(fokus, getContext());
+                    fokusRecyclerView.setAdapter(recyclerViewFokusAdapter);
+                    recyclerViewFokusAdapter.notifyDataSetChanged();
 
-                    //initListenerEkoran();
+                    Log.e("MASUK LOAD", fokus.toString());
+
+                    initListenerFokus();
 
                     swipeRefreshLayout.setRefreshing(false);
                     fokusShimmerLayout.stopShimmer();
                     fokusShimmerLayout.setVisibility(View.GONE);
 
                 } else {
+                    swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
                 }
             }
