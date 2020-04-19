@@ -46,6 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static java.security.AccessController.getContext;
+
 public class DetailFokusActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private int id;
@@ -61,6 +63,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
+    private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
     private TextView appbar_title, appbar_subtile, title, date, description;
     private boolean isHideToolbar = false;
     private LinearLayout titleAppbar;
@@ -71,6 +74,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
+    private List<Data> listNews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +114,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         mId = intent.getStringExtra("id");
         id = Integer.valueOf(mId);
 //
-//        setRecyclerView();
+        setRecyclerView();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -122,7 +126,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private void setRecyclerView() {
         showKeyword();
-        //showListFokus();
+        showListFokus();
     }
 
     private void showKeyword() {
@@ -140,27 +144,26 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     }
 
 
-//    private void initListenerList() {
-//        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
-//
-//                Data data = lists.get(position);
-//                intent.putExtra("id", data.getNews_id());
-//                intent.putExtra("title", data.getNews_title());
-//                intent.putExtra("caption", data.getNews_caption());
-//                intent.putExtra("image", data.getNews_image_new());
-//                intent.putExtra("content", data.getNews_content());
-//                intent.putExtra("date", data.getNews_datepub());
-//                intent.putExtra("source", data.getNews_writer());
-//                intent.putExtra("url", data.getUrl_ci());
-//                intent.putExtra("tags", data.getNews_tags());
-//
-//                startActivity(intent);
-//            }
-//        });
-//    }
+    private void initListenerList() {
+        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
+
+                Data data = listNews.get(position);
+                intent.putExtra("id", data.getNews_id());
+                intent.putExtra("title", data.getNews_title());
+                intent.putExtra("caption", data.getNews_caption());
+                intent.putExtra("image", data.getNews_image_new());
+                intent.putExtra("content", data.getNews_content());
+                intent.putExtra("date", data.getNews_datepub());
+                intent.putExtra("source", data.getNews_writer());
+                intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
+                startActivity(intent);
+            }
+        });
+    }
 
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
@@ -208,12 +211,28 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         callListFokusDetail.enqueue(new Callback<Headline>() {
             @Override
             public void onResponse(Call<Headline> call, Response<Headline> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    if (!listNews.isEmpty()) {
+                        listNews.clear();
+                    }
 
+                    listNews = response.body().getData();
+                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listNews, DetailFokusActivity.this);
+                    listRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                    recyclerViewPopularAdapter.notifyDataSetChanged();
+                    initListenerList();
+                    //swipeRefreshLayout.setRefreshing(false);
+                    detailShimmerLayout.stopShimmer();
+                    detailShimmerLayout.setVisibility(View.GONE);
+                } else {
+                    //detailShimmerLayout.setRefreshing(false);
+                    Toast.makeText(DetailFokusActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Headline> call, Throwable t) {
-
+                //swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

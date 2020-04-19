@@ -121,8 +121,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     fokusRecyclerView.setAdapter(recyclerViewFokusAdapter);
                     recyclerViewFokusAdapter.notifyDataSetChanged();
 
-                    Log.e("MASUK LOAD", fokus.toString());
-
                     initListenerFokus();
 
                     swipeRefreshLayout.setRefreshing(false);

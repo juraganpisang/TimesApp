@@ -126,7 +126,6 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         mTags = separatorTags[0];
 
         mIdNews = Integer.valueOf(mId);
-
         //call intent
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.error(Utils.getRandomDrawbleColor());
@@ -156,7 +155,6 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
                 loadJSON();
             }
         }, 2000);
-
     }
 
     private void addListTag() {
