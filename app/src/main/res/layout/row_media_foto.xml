@@ -3,38 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="360dp"
-        android:layout_height="360dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="286dp"
         android:orientation="vertical"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/imageViewNews"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:transitionName="img" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/light_grey" />
+            android:transitionName="img"
+            android:src="@drawable/bottom_shadow"/>
 
         <TextView
+            android:layout_marginTop="6dp"
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:scrollHorizontally="false"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco."
+            android:singleLine="false"
+            android:textAlignment="center"
+            android:maxLines="3"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />

@@ -1,5 +1,6 @@
 package com.jrg.pisang.timesapp.Api;
 
+import com.jrg.pisang.timesapp.Model.DataFokusDetail;
 import com.jrg.pisang.timesapp.Model.DataKoranDetail;
 import com.jrg.pisang.timesapp.Model.Ekoran;
 import com.jrg.pisang.timesapp.Model.Fokus;
@@ -65,6 +66,23 @@ public interface ApiInterface {
     Call<FotoModel> getFoto(
             @Query("key") String key,
             @Query("news_type") String news_type,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
+
+    //https://api.timesindonesia.co.id/v1/focus_detail/221?key=NyEIwDL51eeaoVhYGPaF
+    @GET("focus_detail/{id}")
+    Call<DataFokusDetail> getFokusDetail(
+            @Path(value = "id", encoded = true) int id,
+            @Query("key") String key
+    );
+
+    //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=focus&cat_id=212&offset=0&limit=10
+    @GET("all_news/")
+    Call<Headline> getListFokus(
+            @Query("key") String key,
+            @Query("news_type") String news_type,
+            @Query(value = "cat_id", encoded = true) int cat_id,
             @Query("offset") int offset,
             @Query("limit") int limit
     );

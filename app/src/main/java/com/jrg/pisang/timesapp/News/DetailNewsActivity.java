@@ -28,6 +28,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewRelatedAdapter;
+import com.jrg.pisang.timesapp.Adapter.TagsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Model.Data;
@@ -51,8 +52,12 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
-    private RecyclerView relatedRecyclerView;
+    private TagsAdapter tagsAdapter;
+
+    private RecyclerView relatedRecyclerView, tagRecyclerView;
+
     private List<Data> relateds = new ArrayList<>();
+    private ArrayList<String> listTags = new ArrayList<>();
 
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
@@ -100,6 +105,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         content = findViewById(R.id.webViewContent);
 
         relatedRecyclerView = findViewById(R.id.relatedRecyclerView);
+        tagRecyclerView = findViewById(R.id.tagRecyclerView);
 
         relatedShimmerLayout.startShimmer();
         detailShimmerLayout.startShimmer();
@@ -140,6 +146,8 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         content.loadData(mContent, "text/html", "utf-8");
         source.setText(mSource);
 
+        addListTag();
+
         setRecyclerView();
 
         new Handler().postDelayed(new Runnable() {
@@ -151,8 +159,23 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
 
     }
 
+    private void addListTag() {
+        for (int i = 0; i < separatorTags.length; i++) {
+            listTags.add(separatorTags[i]);
+        }
+    }
+
     private void setRecyclerView() {
         showRelated();
+        showKeyword();
+    }
+
+
+    private void showKeyword() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        tagRecyclerView.setLayoutManager(layoutManager);
+        tagsAdapter = new TagsAdapter(listTags, this);
+        tagRecyclerView.setAdapter(tagsAdapter);
     }
 
     private void showRelated() {
