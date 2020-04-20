@@ -86,4 +86,14 @@ public interface ApiInterface {
             @Query("offset") int offset,
             @Query("limit") int limit
     );
+    //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=cat&cat_id=6&offset=0&limit=10
+    //kanal
+    @GET("all_news/")
+    Call<Headline> getListKanal(
+            @Query("key") String key,
+            @Query("news_type") String news_type,
+            @Query(value = "cat_id", encoded = true) int cat_id,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
 }

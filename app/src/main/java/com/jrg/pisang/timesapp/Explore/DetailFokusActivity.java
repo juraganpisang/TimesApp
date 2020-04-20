@@ -56,7 +56,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private RecyclerViewDetailFokusAdapter recyclerViewDetailFokusAdapter;
-    private RecyclerView listRecyclerView, keywordRecyclerView;
+    private RecyclerView listRecyclerView, keywordRecyclerView, kanalRecyclerView;
     private DataFokus lists;
 
     private TagsAdapter tagsAdapter;
@@ -75,6 +75,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
     private List<Data> listNews = new ArrayList<>();
+    private List<Data> listKanal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
         keywordRecyclerView = findViewById(R.id.keywordRecyclerView);
         listRecyclerView = findViewById(R.id.listRecyclerView);
+        kanalRecyclerView = findViewById(R.id.kanalRecyclerView);
 
         relatedShimmerLayout.startShimmer();
         detailShimmerLayout.startShimmer();
@@ -127,6 +129,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     private void setRecyclerView() {
         showKeyword();
         showListFokus();
+        showListKanal();
     }
 
     private void showKeyword() {
@@ -141,6 +144,13 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         listRecyclerView.setItemAnimator(new DefaultItemAnimator());
         listRecyclerView.setNestedScrollingEnabled(false);
         listRecyclerView.setAdapter(recyclerViewDetailFokusAdapter);
+    }
+
+    private void showListKanal() {
+        kanalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        kanalRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        kanalRecyclerView.setNestedScrollingEnabled(false);
+        kanalRecyclerView.setAdapter(recyclerViewDetailFokusAdapter);
     }
 
 
@@ -165,10 +175,32 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         });
     }
 
+//    private void initListenerKanal() {
+//        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
+//
+//                Data data = listNews.get(position);
+//                intent.putExtra("id", data.getNews_id());
+//                intent.putExtra("title", data.getNews_title());
+//                intent.putExtra("caption", data.getNews_caption());
+//                intent.putExtra("image", data.getNews_image_new());
+//                intent.putExtra("content", data.getNews_content());
+//                intent.putExtra("date", data.getNews_datepub());
+//                intent.putExtra("source", data.getNews_writer());
+//                intent.putExtra("url", data.getUrl_ci());
+//                intent.putExtra("tags", data.getNews_tags());
+//                startActivity(intent);
+//            }
+//        });
+//    }
+
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<DataFokusDetail> callFokusDetail;
         Call<Headline> callListFokusDetail;
+        Call<Headline> callListKanalDetail;
 
         //detail
         callFokusDetail = apiInterface.getFokusDetail(id, key);
@@ -235,6 +267,37 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
                 //swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        //list kanal
+        callListKanalDetail = apiInterface.getListFokus(key, "cat", id, 0, 10);
+        callListKanalDetail.enqueue(new Callback<Headline>() {
+            @Override
+            public void onResponse(Call<Headline> call, Response<Headline> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    if (!listKanal.isEmpty()) {
+                        listKanal.clear();
+                    }
+                    Log.e(mId+"anjer", mId+"anjer");
+
+                    listKanal = response.body().getData();
+                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailFokusActivity.this);
+                    kanalRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                    recyclerViewPopularAdapter.notifyDataSetChanged();
+                    //initListenerKanal();
+                    //swipeRefreshLayout.setRefreshing(false);
+                    detailShimmerLayout.stopShimmer();
+                    detailShimmerLayout.setVisibility(View.GONE);
+                } else {
+                    //detailShimmerLayout.setRefreshing(false);
+                    Toast.makeText(DetailFokusActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Headline> call, Throwable t) {
+                //swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void addListKeyword() {
@@ -261,7 +324,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     @Override
     public void onResume() {
         super.onResume();
-        setRecyclerView();
+        //setRecyclerView();
         detailShimmerLayout.startShimmer();
         relatedShimmerLayout.startShimmer();
     }
