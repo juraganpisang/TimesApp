@@ -9,18 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jrg.pisang.timesapp.Model.DataFokus;
+import com.jrg.pisang.timesapp.Model.DataFokusModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.List;
 
 public class RecyclerViewFokusAdapter extends RecyclerView.Adapter<RecyclerViewFokusAdapter.MyViewHolder> {
 
-    private List<DataFokus> data;
+    private List<DataFokusModel> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewFokusAdapter(List<DataFokus> data, Context context) {
+    public RecyclerViewFokusAdapter(List<DataFokusModel> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -34,7 +34,7 @@ public class RecyclerViewFokusAdapter extends RecyclerView.Adapter<RecyclerViewF
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        DataFokus model = data.get(position);
+        DataFokusModel model = data.get(position);
 
         holder.focnews_title.setText(model.getFocnews_title());
     }

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,20 +24,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewRelatedAdapter;
 import com.jrg.pisang.timesapp.Adapter.TagsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.Data;
-import com.jrg.pisang.timesapp.Model.Headline;
-import com.jrg.pisang.timesapp.Model.NewsModel;
+import com.jrg.pisang.timesapp.Model.DataModel;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +50,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
 
     private RecyclerView relatedRecyclerView, tagRecyclerView;
 
-    private List<Data> relateds = new ArrayList<>();
+    private List<DataModel> relateds = new ArrayList<>();
     private ArrayList<String> listTags = new ArrayList<>();
 
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
@@ -174,6 +168,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         tagRecyclerView.setLayoutManager(layoutManager);
         tagsAdapter = new TagsAdapter(listTags, this);
         tagRecyclerView.setAdapter(tagsAdapter);
+        initListenerTag();
     }
 
     private void showRelated() {
@@ -183,13 +178,28 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         relatedRecyclerView.setAdapter(recyclerViewPopularAdapter);
     }
 
+    private void initListenerTag() {
+        tagsAdapter.setOnItemClickListener(new TagsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailNewsActivity.this, TagActivity.class);
+
+                intent.putExtra("tag", listTags.get(position));
+                Log.e("tag e oleh : ", listTags.get(position));
+
+                startActivity(intent);
+            }
+        });
+
+    }
+
     private void initListenerRelated() {
         recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(DetailNewsActivity.this, DetailNewsActivity.class);
 
-                Data data = relateds.get(position);
+                DataModel data = relateds.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -208,12 +218,12 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     private void loadJSON() {
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Headline> callRelated;
+        Call<HeadlineModel> callRelated;
 
         callRelated = apiInterface.getNewsRelated(key, "related_new", mIdNews, mTags, 0, 10);
-        callRelated.enqueue(new Callback<Headline>() {
+        callRelated.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!relateds.isEmpty()) {
                         relateds.clear();
@@ -239,7 +249,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 Toast.makeText(DetailNewsActivity.this, "gagal", Toast.LENGTH_SHORT).show();
             }
         });

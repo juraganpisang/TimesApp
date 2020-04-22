@@ -2,18 +2,14 @@ package com.jrg.pisang.timesapp.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +20,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.jrg.pisang.timesapp.Model.Data;
+import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
@@ -32,11 +28,11 @@ import java.util.List;
 
 public class RecyclerViewNewsAdapter extends RecyclerView.Adapter<RecyclerViewNewsAdapter.MyViewHolder> {
 
-    private List<Data> data;
+    private List<DataModel> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewNewsAdapter(List<Data> data, Context context) {
+    public RecyclerViewNewsAdapter(List<DataModel> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -52,7 +48,7 @@ public class RecyclerViewNewsAdapter extends RecyclerView.Adapter<RecyclerViewNe
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 
         final MyViewHolder holders = holder;
-        Data model = data.get(position);
+        DataModel model = data.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());

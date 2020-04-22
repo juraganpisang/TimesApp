@@ -33,5 +33,6 @@ public class NewsModel {
     public void setDateNews(String dateNews) {
         this.dateNews = dateNews;
     }
+
 }
 

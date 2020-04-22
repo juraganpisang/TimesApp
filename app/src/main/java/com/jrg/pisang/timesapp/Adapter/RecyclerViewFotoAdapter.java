@@ -21,7 +21,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.jrg.pisang.timesapp.Model.DataFotoModel;
-import com.jrg.pisang.timesapp.Model.DataKoran;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 

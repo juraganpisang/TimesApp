@@ -2,23 +2,18 @@ package com.jrg.pisang.timesapp.EKoran;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.jrg.pisang.timesapp.Adapter.EkoranSliderAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.DataKoran;
-import com.jrg.pisang.timesapp.Model.DataKoranDetail;
+import com.jrg.pisang.timesapp.Model.DataKoranModel;
+import com.jrg.pisang.timesapp.Model.EKoranDetailModel;
 import com.jrg.pisang.timesapp.R;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -26,7 +21,6 @@ import com.smarteist.autoimageslider.SliderView;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +31,7 @@ public class DetailEkoranActivity extends AppCompatActivity {
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private EkoranSliderAdapter ekoranSliderAdapter;
-    private DataKoran korans;
+    private DataKoranModel korans;
     private String mId;
     private int id;
     private SliderView sliderView;
@@ -68,12 +62,12 @@ public class DetailEkoranActivity extends AppCompatActivity {
 
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<DataKoranDetail> callKoran;
+        Call<EKoranDetailModel> callKoran;
 
         callKoran = apiInterface.getEKoranDetail(id, key);
-        callKoran.enqueue(new Callback<DataKoranDetail>() {
+        callKoran.enqueue(new Callback<EKoranDetailModel>() {
             @Override
-            public void onResponse(Call<DataKoranDetail> call, Response<DataKoranDetail> response) {
+            public void onResponse(Call<EKoranDetailModel> call, Response<EKoranDetailModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
 
                     korans = response.body().getData();
@@ -132,7 +126,7 @@ public class DetailEkoranActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<DataKoranDetail> call, Throwable t) {
+            public void onFailure(Call<EKoranDetailModel> call, Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(DetailEkoranActivity.this, "gagal", Toast.LENGTH_SHORT).show();
             }

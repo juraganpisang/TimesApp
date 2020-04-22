@@ -12,16 +12,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -30,14 +24,12 @@ import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Adapter.TagsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.Data;
-import com.jrg.pisang.timesapp.Model.DataFokus;
-import com.jrg.pisang.timesapp.Model.DataFokusDetail;
-import com.jrg.pisang.timesapp.Model.Fokus;
-import com.jrg.pisang.timesapp.Model.Headline;
+import com.jrg.pisang.timesapp.Model.DataModel;
+import com.jrg.pisang.timesapp.Model.DataFokusModel;
+import com.jrg.pisang.timesapp.Model.FokusDetailModel;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.News.DetailNewsActivity;
 import com.jrg.pisang.timesapp.R;
-import com.jrg.pisang.timesapp.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +37,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static java.security.AccessController.getContext;
 
 public class DetailFokusActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -57,7 +47,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private RecyclerViewDetailFokusAdapter recyclerViewDetailFokusAdapter;
     private RecyclerView listRecyclerView, keywordRecyclerView, kanalRecyclerView;
-    private DataFokus lists;
+    private DataFokusModel lists;
 
     private TagsAdapter tagsAdapter;
 
@@ -74,8 +64,8 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
-    private List<Data> listNews = new ArrayList<>();
-    private List<Data> listKanal = new ArrayList<>();
+    private List<DataModel> listNews = new ArrayList<>();
+    private List<DataModel> listKanal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +150,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
 
-                Data data = listNews.get(position);
+                DataModel data = listNews.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -181,7 +171,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 //            public void onItemClick(View view, int position) {
 //                Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
 //
-//                Data data = listNews.get(position);
+//                DataModel data = listNews.get(position);
 //                intent.putExtra("id", data.getNews_id());
 //                intent.putExtra("title", data.getNews_title());
 //                intent.putExtra("caption", data.getNews_caption());
@@ -198,15 +188,15 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<DataFokusDetail> callFokusDetail;
-        Call<Headline> callListFokusDetail;
-        Call<Headline> callListKanalDetail;
+        Call<FokusDetailModel> callFokusDetail;
+        Call<HeadlineModel> callListFokusDetail;
+        Call<HeadlineModel> callListKanalDetail;
 
         //detail
         callFokusDetail = apiInterface.getFokusDetail(id, key);
-        callFokusDetail.enqueue(new Callback<DataFokusDetail>() {
+        callFokusDetail.enqueue(new Callback<FokusDetailModel>() {
             @Override
-            public void onResponse(Call<DataFokusDetail> call, Response<DataFokusDetail> response) {
+            public void onResponse(Call<FokusDetailModel> call, Response<FokusDetailModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
 
                     detailShimmerLayout.stopShimmer();
@@ -233,16 +223,16 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
             }
 
             @Override
-            public void onFailure(Call<DataFokusDetail> call, Throwable t) {
+            public void onFailure(Call<FokusDetailModel> call, Throwable t) {
                 Toast.makeText(DetailFokusActivity.this, "gagal", Toast.LENGTH_SHORT).show();
             }
         });
 
         //list berita
         callListFokusDetail = apiInterface.getListFokus(key, "focus", id, 0, 10);
-        callListFokusDetail.enqueue(new Callback<Headline>() {
+        callListFokusDetail.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!listNews.isEmpty()) {
                         listNews.clear();
@@ -263,16 +253,16 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 //swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         //list kanal
         callListKanalDetail = apiInterface.getListFokus(key, "cat", id, 0, 10);
-        callListKanalDetail.enqueue(new Callback<Headline>() {
+        callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!listKanal.isEmpty()) {
                         listKanal.clear();
@@ -294,7 +284,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 //swipeRefreshLayout.setRefreshing(false);
             }
         });

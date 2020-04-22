@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,8 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.Data;
-import com.jrg.pisang.timesapp.Model.Headline;
-import com.jrg.pisang.timesapp.Model.NewsModel;
+import com.jrg.pisang.timesapp.Model.DataModel;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
 
     private RecyclerView latestRecyclerView;
 
-    private List<Data> latests = new ArrayList<>();
+    private List<DataModel> latests = new ArrayList<>();
 
     private ShimmerFrameLayout latestShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -98,7 +96,7 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
-                Data data = latests.get(position);
+                DataModel data = latests.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -118,12 +116,12 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Headline> callLatest;
+        Call<HeadlineModel> callLatest;
 
         callLatest = apiInterface.getNewsHeadline(key, "all", 0, 20);
-        callLatest.enqueue(new Callback<Headline>() {
+        callLatest.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!latests.isEmpty()) {
                         latests.clear();
@@ -147,7 +145,7 @@ public class LatestNewsFragment extends Fragment implements SwipeRefreshLayout.O
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

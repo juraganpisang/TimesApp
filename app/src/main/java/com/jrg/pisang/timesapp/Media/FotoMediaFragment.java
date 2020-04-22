@@ -81,21 +81,21 @@ public class FotoMediaFragment extends Fragment implements SwipeRefreshLayout.On
         return view;
     }
     private void setRecyclerView() {
-        showFokus();
+        showFoto();
     }
 
-    private void showFokus() {
+    private void showFoto() {
         fotoRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 //        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        ekoranRecyclerView.setNestedScrollingEnabled(false);
         fotoRecyclerView.setAdapter(recyclerViewFotoAdapter);
         fotoRecyclerView.setHasFixedSize(true);
     }
-    private void initListenerEkoran() {
+    private void initListenerFoto() {
         recyclerViewFotoAdapter.setOnItemClickListener(new RecyclerViewFotoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), DetailNewsActivity.class);
+                Intent intent = new Intent(getContext(), DetailFotoActivity.class);
 
                 DataFotoModel data = fotos.get(position);
                 intent.putExtra("id", data.getGal_id());
@@ -120,7 +120,7 @@ public class FotoMediaFragment extends Fragment implements SwipeRefreshLayout.On
                     fotoRecyclerView.setAdapter(recyclerViewFotoAdapter);
                     recyclerViewFotoAdapter.notifyDataSetChanged();
 
-                    initListenerEkoran();
+                    initListenerFoto();
                     swipeRefreshLayout.setRefreshing(false);
 
                     fotoShimmerLayout.stopShimmer();

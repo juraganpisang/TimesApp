@@ -20,7 +20,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.jrg.pisang.timesapp.Model.Data;
+import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
@@ -28,11 +28,11 @@ import java.util.List;
 
 public class RecyclerViewPopularAdapter extends RecyclerView.Adapter<RecyclerViewPopularAdapter.MyViewHolder> {
 
-    private List<Data> data;
+    private List<DataModel> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewPopularAdapter(List<Data> data, Context context) {
+    public RecyclerViewPopularAdapter(List<DataModel> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -47,7 +47,7 @@ public class RecyclerViewPopularAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewPopularAdapter.MyViewHolder holder, int position) {
 
-        Data model = data.get(position);
+        DataModel model = data.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());

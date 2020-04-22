@@ -3,16 +3,15 @@ package com.jrg.pisang.timesapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class FokusDetailModel {
 
-public class Fokus {
     @SerializedName("status")
     @Expose
     private String status;
 
     @SerializedName("data")
     @Expose
-    private List<DataFokus> data;
+    private DataFokusModel data;
 
     public String getStatus() {
         return status;
@@ -22,11 +21,11 @@ public class Fokus {
         this.status = status;
     }
 
-    public List<DataFokus> getData() {
+    public DataFokusModel getData() {
         return data;
     }
 
-    public void setData(List<DataFokus> data) {
+    public void setData(DataFokusModel data) {
         this.data = data;
     }
 }

@@ -1,12 +1,12 @@
 package com.jrg.pisang.timesapp.Api;
 
-import com.jrg.pisang.timesapp.Model.DataFokusDetail;
-import com.jrg.pisang.timesapp.Model.DataKoranDetail;
-import com.jrg.pisang.timesapp.Model.Ekoran;
-import com.jrg.pisang.timesapp.Model.Fokus;
+import com.jrg.pisang.timesapp.Model.FokusDetailModel;
+import com.jrg.pisang.timesapp.Model.EKoranDetailModel;
+import com.jrg.pisang.timesapp.Model.EkoranModel;
+import com.jrg.pisang.timesapp.Model.FokusModel;
+import com.jrg.pisang.timesapp.Model.FotoDetailModel;
 import com.jrg.pisang.timesapp.Model.FotoModel;
-import com.jrg.pisang.timesapp.Model.Headline;
-import com.jrg.pisang.timesapp.Model.DataFokus;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,18 +16,19 @@ import retrofit2.http.Query;
 public interface ApiInterface {
     //    https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=populer&offset=0&limit=10
     //    - Trending news_type=trending
-    //    - Headline news_type = headline
+    //    - HeadlineModel news_type = headline
 
     @GET("all_news/")
-    Call<Headline> getNewsHeadline(
+    Call<HeadlineModel> getNewsHeadline(
             @Query("key") String key,
             @Query("news_type") String news_type,
             @Query("offset") int offset,
             @Query("limit") int limit
     );
 
+    //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=related_new&news_id=260518&title=virus+corona&offset=0&limit=10
     @GET("all_news/")
-    Call<Headline> getNewsRelated(
+    Call<HeadlineModel> getNewsRelated(
             @Query("key") String key,
             @Query("news_type") String news_type,
             @Query(value = "news_id", encoded = true) int news_id,
@@ -39,7 +40,7 @@ public interface ApiInterface {
     //    https://api.timesindonesia.co.id/v1/all_ekoran/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=10
     //ekoran
     @GET("all_ekoran/")
-    Call<Ekoran> getEKoran(
+    Call<EkoranModel> getEKoran(
             @Query("key") String key,
             @Query("offset") int offset,
             @Query("limit") int limit
@@ -47,7 +48,7 @@ public interface ApiInterface {
 
     //Koran_detail/1249
     @GET("koran_detail/{id}")
-    Call<DataKoranDetail> getEKoranDetail(
+    Call<EKoranDetailModel> getEKoranDetail(
             @Path(value = "id", encoded = true) int id,
             @Query("key") String key
     );
@@ -55,7 +56,7 @@ public interface ApiInterface {
     //https://api.timesindonesia.co.id/v1/list_focus/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=5
     //fokus
     @GET("list_focus/")
-    Call<Fokus> getFokus(
+    Call<FokusModel> getFokus(
             @Query("key") String key,
             @Query("offset") int offset,
             @Query("limit") int limit
@@ -70,29 +71,36 @@ public interface ApiInterface {
             @Query("limit") int limit
     );
 
+    //https://api.timesindonesia.co.id/v1/foto_detail/1435?key=NyEIwDL51eeaoVhYGPaF
+    @GET("foto_detail/{id}")
+    Call<FotoDetailModel> getFotoDetail(
+            @Path(value = "id", encoded = true) int id,
+            @Query("key") String key
+    );
+
     //https://api.timesindonesia.co.id/v1/focus_detail/221?key=NyEIwDL51eeaoVhYGPaF
     @GET("focus_detail/{id}")
-    Call<DataFokusDetail> getFokusDetail(
+    Call<FokusDetailModel> getFokusDetail(
             @Path(value = "id", encoded = true) int id,
             @Query("key") String key
     );
 
     //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=focus&cat_id=212&offset=0&limit=10
     @GET("all_news/")
-    Call<Headline> getListFokus(
+    Call<HeadlineModel> getListFokus(
             @Query("key") String key,
             @Query("news_type") String news_type,
             @Query(value = "cat_id", encoded = true) int cat_id,
             @Query("offset") int offset,
             @Query("limit") int limit
     );
-    //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=cat&cat_id=6&offset=0&limit=10
-    //kanal
+
+    ////https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=presiden%20jokowi&offset=0&limit=10
     @GET("all_news/")
-    Call<Headline> getListKanal(
+    Call<HeadlineModel> getListTag(
             @Query("key") String key,
             @Query("news_type") String news_type,
-            @Query(value = "cat_id", encoded = true) int cat_id,
+            @Query("title") String title,
             @Query("offset") int offset,
             @Query("limit") int limit
     );

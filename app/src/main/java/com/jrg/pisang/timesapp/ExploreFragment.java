@@ -6,13 +6,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,8 @@ import com.jrg.pisang.timesapp.Adapter.RecyclerViewFokusAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Explore.DetailFokusActivity;
-import com.jrg.pisang.timesapp.Model.DataFokus;
-import com.jrg.pisang.timesapp.Model.Fokus;
+import com.jrg.pisang.timesapp.Model.DataFokusModel;
+import com.jrg.pisang.timesapp.Model.FokusModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private RecyclerView fokusRecyclerView;
 
-    private List<DataFokus> fokus = new ArrayList<>();
+    private List<DataFokusModel> fokus = new ArrayList<>();
 
     private ShimmerFrameLayout fokusShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -99,7 +97,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailFokusActivity.class);
 
-                DataFokus data = fokus.get(position);
+                DataFokusModel data = fokus.get(position);
                 intent.putExtra("id", data.getFocnews_id());
                 startActivity(intent);
             }
@@ -108,12 +106,12 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Fokus> callFokus;
+        Call<FokusModel> callFokus;
 
         callFokus = apiInterface.getFokus(key, 0, 15);
-        callFokus.enqueue(new Callback<Fokus>() {
+        callFokus.enqueue(new Callback<FokusModel>() {
             @Override
-            public void onResponse(Call<Fokus> call, Response<Fokus> response) {
+            public void onResponse(Call<FokusModel> call, Response<FokusModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
 
                     fokus = response.body().getData();
@@ -134,7 +132,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
 
             @Override
-            public void onFailure(Call<Fokus> call, Throwable t) {
+            public void onFailure(Call<FokusModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

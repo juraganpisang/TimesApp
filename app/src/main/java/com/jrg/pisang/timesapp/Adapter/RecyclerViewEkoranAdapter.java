@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +19,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.jrg.pisang.timesapp.Model.DataKoran;
+import com.jrg.pisang.timesapp.Model.DataKoranModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
 
@@ -28,12 +27,12 @@ import java.util.List;
 
 public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerViewEkoranAdapter.MyViewHolder> {
 
-    private List<DataKoran> dataKoran;
+    private List<DataKoranModel> dataKoranModel;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewEkoranAdapter(List<DataKoran> dataKoran, Context context) {
-        this.dataKoran = dataKoran;
+    public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoran, Context context) {
+        this.dataKoranModel = dataKoran;
         this.context = context;
     }
 
@@ -47,7 +46,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewEkoranAdapter.MyViewHolder holder, int position) {
 
-        DataKoran model = dataKoran.get(position);
+        DataKoranModel model = dataKoranModel.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
@@ -75,7 +74,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return dataKoran.size();
+        return dataKoranModel.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

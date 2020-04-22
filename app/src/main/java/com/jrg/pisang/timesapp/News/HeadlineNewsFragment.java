@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,8 @@ import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.Data;
-import com.jrg.pisang.timesapp.Model.Headline;
+import com.jrg.pisang.timesapp.Model.DataModel;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -46,9 +45,9 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
 
     private RecyclerView headlineRecyclerView, popularRecyclerView, trendingRecyclerView;
 
-    private List<Data> datas = new ArrayList<>();
-    private List<Data> populars = new ArrayList<>();
-    private List<Data> trendings = new ArrayList<>();
+    private List<DataModel> datas = new ArrayList<>();
+    private List<DataModel> populars = new ArrayList<>();
+    private List<DataModel> trendings = new ArrayList<>();
 
     private ShimmerFrameLayout headlineShimmerLayout, subheadlineShimmerLayout, trendingShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -91,7 +90,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
         trendingLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), PopularActivity.class);
+                Intent i = new Intent(getContext(), TrendingActivity.class);
                 startActivity(i);
             }
         });
@@ -144,7 +143,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
-                Data data = datas.get(position);
+                DataModel data = datas.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -166,7 +165,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
-                Data data = populars.get(position);
+                DataModel data = populars.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -188,7 +187,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
 
-                Data data = trendings.get(position);
+                DataModel data = trendings.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -207,12 +206,12 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Headline> callHeadline, callPopular, callTrending;
+        Call<HeadlineModel> callHeadline, callPopular, callTrending;
 
         callHeadline = apiInterface.getNewsHeadline(key, "headline", 0, 5);
-        callHeadline.enqueue(new Callback<Headline>() {
+        callHeadline.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!datas.isEmpty()) {
                         datas.clear();
@@ -236,16 +235,16 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         //popular
         callPopular = apiInterface.getNewsHeadline(key, "populer", 0, 10);
-        callPopular.enqueue(new Callback<Headline>() {
+        callPopular.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!populars.isEmpty()) {
                         populars.clear();
@@ -268,7 +267,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -276,9 +275,9 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
 
         //trending
         callTrending = apiInterface.getNewsHeadline(key, "trending", 0, 10);
-        callTrending.enqueue(new Callback<Headline>() {
+        callTrending.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!trendings.isEmpty()) {
                         trendings.clear();
@@ -301,7 +300,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

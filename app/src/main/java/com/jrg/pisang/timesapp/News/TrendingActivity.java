@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.appbar.AppBarLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.Data;
-import com.jrg.pisang.timesapp.Model.Headline;
+import com.jrg.pisang.timesapp.Model.DataModel;
+import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -34,21 +36,28 @@ public class TrendingActivity extends AppCompatActivity implements SwipeRefreshL
 
     private RecyclerView trendingRecyclerView;
 
-    private List<Data> trendings = new ArrayList<>();
+    private List<DataModel> trendings = new ArrayList<>();
 
     private ShimmerFrameLayout trendingShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private AppBarLayout appBarLayout;
+    private TextView appbar_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popular);
+
+        appBarLayout = findViewById(R.id.appbar);
+        appbar_title = findViewById(R.id.title_appbar);
+
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
 
         trendingRecyclerView = findViewById(R.id.popularRecyclerView);
-        trendingShimmerLayout = findViewById(R.id.latestShimmerLayout);
+        trendingShimmerLayout = findViewById(R.id.popularShimmerLayout);
 
         trendingShimmerLayout.startShimmer();
 
@@ -80,7 +89,7 @@ public class TrendingActivity extends AppCompatActivity implements SwipeRefreshL
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(TrendingActivity.this, DetailNewsActivity.class);
 
-                Data data = trendings.get(position);
+                DataModel data = trendings.get(position);
                 intent.putExtra("id", data.getNews_id());
                 intent.putExtra("title", data.getNews_title());
                 intent.putExtra("caption", data.getNews_caption());
@@ -100,16 +109,19 @@ public class TrendingActivity extends AppCompatActivity implements SwipeRefreshL
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Headline> callTrending;
+        Call<HeadlineModel> callTrending;
 
         callTrending = apiInterface.getNewsHeadline(key, "trending", 0, 30);
-        callTrending.enqueue(new Callback<Headline>() {
+        callTrending.enqueue(new Callback<HeadlineModel>() {
             @Override
-            public void onResponse(Call<Headline> call, Response<Headline> response) {
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!trendings.isEmpty()) {
                         trendings.clear();
                     }
+
+                    appBarLayout.setVisibility(View.VISIBLE);
+                    appbar_title.setText("TRENDING NEWS");
 
                     trendings = response.body().getData();
                     recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(trendings, getApplicationContext());
@@ -129,7 +141,7 @@ public class TrendingActivity extends AppCompatActivity implements SwipeRefreshL
             }
 
             @Override
-            public void onFailure(Call<Headline> call, Throwable t) {
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

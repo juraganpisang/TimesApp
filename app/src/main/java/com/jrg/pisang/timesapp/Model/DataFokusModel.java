@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class DataFokus {
+public class DataFokusModel {
     @SerializedName("focnews_id")
     @Expose
     private String focnews_id;

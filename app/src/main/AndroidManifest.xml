@@ -14,6 +14,10 @@
         <activity android:name=".Explore.DetailFokusActivity"></activity>
         <activity android:name=".EKoran.DetailEkoranActivity" />
         <activity android:name=".News.PopularActivity" />
+        <activity android:name=".News.TrendingActivity" />
+        <activity android:name=".News.TagActivity" />
+        <activity android:name=".Media.DetailFotoActivity" />
+
         <activity
             android:name=".News.DetailNewsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

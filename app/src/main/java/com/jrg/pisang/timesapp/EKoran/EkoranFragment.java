@@ -4,28 +4,22 @@ package com.jrg.pisang.timesapp.EKoran;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewEkoranAdapter;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Model.DataKoran;
-import com.jrg.pisang.timesapp.Model.Ekoran;
+import com.jrg.pisang.timesapp.Model.DataKoranModel;
+import com.jrg.pisang.timesapp.Model.EkoranModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -46,7 +40,7 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private RecyclerView ekoranRecyclerView;
 
-    private List<DataKoran> korans = new ArrayList<>();
+    private List<DataKoranModel> korans = new ArrayList<>();
 
     private ShimmerFrameLayout ekoranShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -101,7 +95,7 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailEkoranActivity.class);
 
-                DataKoran data = korans.get(position);
+                DataKoranModel data = korans.get(position);
                 intent.putExtra("id", data.getId());
                 startActivity(intent);
             }
@@ -111,12 +105,12 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Ekoran> callKoran;
+        Call<EkoranModel> callKoran;
 
         callKoran = apiInterface.getEKoran(key, 0, 15);
-        callKoran.enqueue(new Callback<Ekoran>() {
+        callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
-            public void onResponse(Call<Ekoran> call, Response<Ekoran> response) {
+            public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!korans.isEmpty()) {
                         korans.clear();
@@ -140,7 +134,7 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
 
             @Override
-            public void onFailure(Call<Ekoran> call, Throwable t) {
+            public void onFailure(Call<EkoranModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
