@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -55,7 +56,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
 
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
-    private ImageView imageView;
+    private ImageView imageView, shareFacebook, shareWhatsapp, shareLine, shareTwitter, shareOther;
     private TextView appbar_title, appbar_subtile, caption, title, source, date;
     private WebView content;
     private boolean isHideToolbar = false;
@@ -97,6 +98,13 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         source = findViewById(R.id.textViewSource);
         date = findViewById(R.id.textViewDate);
         content = findViewById(R.id.webViewContent);
+
+        //sosmed
+        shareWhatsapp = findViewById(R.id.shareWhatsapp);
+        shareLine = findViewById(R.id.shareLine);
+        shareTwitter = findViewById(R.id.shareTwitter);
+        shareFacebook = findViewById(R.id.shareFacebook);
+        shareOther = findViewById(R.id.shareOther);
 
         relatedRecyclerView = findViewById(R.id.relatedRecyclerView);
         tagRecyclerView = findViewById(R.id.tagRecyclerView);
@@ -148,7 +156,67 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
             public void run() {
                 loadJSON();
             }
-        }, 2000);
+        }, 1000);
+
+        shareWhatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent share = new Intent();
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + mUrl);
+                share.setType("text/plain");
+                share.setPackage("com.whatsapp");
+                startActivity(Intent.createChooser(share, "Share to"));
+            }
+        });
+        shareFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent share = new Intent();
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + mUrl);
+                share.setType("text/plain");
+                share.setPackage("com.facebook.lite");
+                share.setPackage("com.facebook.katana");
+                startActivity(Intent.createChooser(share, "Share to"));
+            }
+        });
+        shareTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://www.twitter.com/intent/tweet?text=" + title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + mUrl;
+                Intent share = new Intent(Intent.ACTION_VIEW);
+                share.setData(Uri.parse(url));
+                startActivity(Intent.createChooser(share, "Share to"));
+            }
+        });
+        shareLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent share = new Intent();
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + mUrl);
+                share.setType("text/plain");
+                share.setPackage("jp.naver.line.android");
+                startActivity(Intent.createChooser(share, "Share to"));
+            }
+        });
+
+        shareOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent share = new Intent();
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + mUrl);
+                share.setType("text/plain");
+                startActivity(Intent.createChooser(share, "Share to"));
+            }
+        });
     }
 
     private void addListTag() {

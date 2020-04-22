@@ -251,31 +251,48 @@
                 android:orientation="horizontal"
                 android:padding="14dp">
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_android_black" />
+                <TextView
+                    android:id="@+id/shareUrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:id="@+id/shareWhatsapp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_android_black" />
+                    android:src="@drawable/sosmed_whatsapp" />
+
+                <ImageView
+                    android:id="@+id/shareFacebook"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sosmed_facebook" />
 
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="10dp"
+                    android:id="@+id/shareLine"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_android_black" />
+                    android:src="@drawable/sosmed_line"/>
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:id="@+id/shareTwitter"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_android_black" />
+                    android:src="@drawable/sosmed_twitter"/>
+
+                <ImageView
+                    android:id="@+id/shareOther"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_more_primary"
+                    android:background="@color/light_grey"/>
 
             </LinearLayout>
 
