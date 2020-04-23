@@ -2,24 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_search"
-        app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="Font"/>
-
-    <item android:id="@+id/action_notif"
+    <item android:id="@+id/action_share"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_share"
         android:title="Share" />
 
-    <item android:id="@+id/action_settings"
-        app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="Save" />
-
-    <item android:id="@+id/action_more"
-        app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="More" />
+    <item android:id="@+id/action_view_web"
+        app:showAsAction="never"
+        android:title="Open with browser"/>
 
 </menu>

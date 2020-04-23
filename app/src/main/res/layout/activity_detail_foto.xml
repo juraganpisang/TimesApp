@@ -286,14 +286,6 @@
                     android:layout_weight="1"
                     android:src="@drawable/sosmed_twitter"/>
 
-                <ImageView
-                    android:id="@+id/shareOther"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_more_primary"
-                    android:background="@color/light_grey"/>
-
             </LinearLayout>
 
             <View

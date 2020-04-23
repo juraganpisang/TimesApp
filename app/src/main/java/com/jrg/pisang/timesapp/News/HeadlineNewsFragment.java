@@ -14,7 +14,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -54,6 +58,12 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
 
     private LinearLayout populerLL, trendingLL;
 
+    //error layout
+    private RelativeLayout errorLayout;
+    private ImageView errorImage;
+    private TextView errorTitle, errorMessage;
+    private Button btnRetry;
+
     public HeadlineNewsFragment() {
         // Required empty public constructor
     }
@@ -63,6 +73,13 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_headline_news, container, false);
+
+        //error layout
+        errorLayout = view.findViewById(R.id.errorLayout);
+        errorImage = view.findViewById(R.id.errorImage);
+        errorTitle = view.findViewById(R.id.errorTitle);
+        errorMessage = view.findViewById(R.id.errorMessage);
+        btnRetry = view.findViewById(R.id.btnRetry);
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -204,6 +221,9 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     }
 
     public void loadJSON() {
+
+        errorLayout.setVisibility(View.GONE);
+
         swipeRefreshLayout.setRefreshing(true);
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<HeadlineModel> callHeadline, callPopular, callTrending;
@@ -230,13 +250,29 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
 
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
+
+                    String errorCode;
+                    switch (response.code()) {
+                        case 404:
+                            errorCode = " 404 not found ";
+                            break;
+                        case 500:
+                            errorCode = " 500 Server broken ";
+                            break;
+                        default:
+                            errorCode = "Uknown error";
+                            break;
+                    }
+                    showErrorMessage(R.drawable.no_result, "No Result", "Please Try Again\n" +
+                            ""+errorCode);
                 }
             }
 
             @Override
             public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
+                showErrorMessage(R.drawable.no_result, "Oopss..", "Network failure, Please Try Again\n" +
+                        ""+t.toString());
             }
         });
 
@@ -325,5 +361,22 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         loadJSON();
+    }
+
+    private void showErrorMessage(int imageView, String title, String message) {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+
+        errorImage.setImageResource(imageView);
+        errorTitle.setText(title);
+        errorMessage.setText(message);
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRefresh();
+            }
+        });
     }
 }

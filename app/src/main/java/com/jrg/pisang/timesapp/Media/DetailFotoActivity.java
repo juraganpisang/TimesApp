@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -48,7 +51,7 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
 
     private ShimmerFrameLayout detailShimmerLayout;
 
-    private ImageView imageView, shareFacebook, shareWhatsapp, shareLine, shareTwitter, shareOther;
+    private ImageView imageView, shareFacebook, shareWhatsapp, shareLine, shareTwitter;
     private TextView appbar_title, appbar_subtile, caption, title, source, date, shareUrl;
     private WebView content;
     private boolean isHideToolbar = false;
@@ -94,7 +97,6 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
         shareLine = findViewById(R.id.shareLine);
         shareTwitter = findViewById(R.id.shareTwitter);
         shareFacebook = findViewById(R.id.shareFacebook);
-        shareOther = findViewById(R.id.shareOther);
         shareUrl = findViewById(R.id.shareUrl);
 
         detailShimmerLayout.startShimmer();
@@ -118,7 +120,7 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
                 Intent share = new Intent();
                 share.setAction(Intent.ACTION_SEND);
                 share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
-                        "\nhttps://timesindonesia.co.id"+shareUrl.getText());
+                        "\nhttps://timesindonesia.co.id" + shareUrl.getText());
                 share.setType("text/plain");
                 share.setPackage("com.whatsapp");
                 startActivity(Intent.createChooser(share, "Share to"));
@@ -130,7 +132,7 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
                 Intent share = new Intent();
                 share.setAction(Intent.ACTION_SEND);
                 share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
-                        "\nhttps://timesindonesia.co.id"+shareUrl.getText());
+                        "\nhttps://timesindonesia.co.id" + shareUrl.getText());
                 share.setType("text/plain");
                 share.setPackage("com.facebook.katana"); //Facebook App package
                 startActivity(Intent.createChooser(share, "Share to"));
@@ -139,8 +141,8 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
         shareTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://www.twitter.com/intent/tweet?text="+title.getText() + "\n" +
-                        "\nhttps://timesindonesia.co.id"+shareUrl.getText();
+                String url = "http://www.twitter.com/intent/tweet?text=" + title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + shareUrl.getText();
                 Intent share = new Intent(Intent.ACTION_VIEW);
                 share.setData(Uri.parse(url));
                 startActivity(Intent.createChooser(share, "Share to"));
@@ -152,20 +154,9 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
                 Intent share = new Intent();
                 share.setAction(Intent.ACTION_SEND);
                 share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
-                        "\nhttps://timesindonesia.co.id"+shareUrl.getText());
+                        "\nhttps://timesindonesia.co.id" + shareUrl.getText());
                 share.setType("text/plain");
                 share.setPackage("jp.naver.line.android");
-                startActivity(Intent.createChooser(share, "Share to"));
-            }
-        });
-        shareOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent share = new Intent();
-                share.setAction(Intent.ACTION_SEND);
-                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
-                        "\nhttps://timesindonesia.co.id"+shareUrl.getText());
-                share.setType("text/plain");
                 startActivity(Intent.createChooser(share, "Share to"));
             }
         });
@@ -190,7 +181,7 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.error(Utils.getRandomDrawbleColor());
                     appbar_title.setText(dataFotoModel.getGal_title());
-                    appbar_subtile.setText("timesindonesia.co.id"+dataFotoModel.getUrlPath());
+                    appbar_subtile.setText("timesindonesia.co.id" + dataFotoModel.getUrlPath());
 
                     Glide.with(DetailFotoActivity.this)
                             .load(dataFotoModel.getGal_cover())
@@ -261,21 +252,36 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
         detailShimmerLayout.setVisibility(View.GONE);
     }
 
-    //
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_detail, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.homeAsUp:
-//                onBackPressed();
-//                break;
-//        }
-//        return true;
-//    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_view_web) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(shareUrl.getText().toString()));
+            startActivity(i);
+            return true;
+        } else if (id == R.id.action_share) {
+            try {
+                Intent share = new Intent();
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra(Intent.EXTRA_TEXT, title.getText() + "\n" +
+                        "\nhttps://timesindonesia.co.id" + shareUrl.getText());
+                share.setType("text/plain");
+                startActivity(Intent.createChooser(share, "Share to"));
+            } catch (Exception e) {
+                Toast.makeText(this, "Hmmm.. Sorry, \nCannot be share", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }
