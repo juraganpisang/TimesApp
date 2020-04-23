@@ -46,8 +46,8 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private RecyclerViewDetailFokusAdapter recyclerViewDetailFokusAdapter;
-    private RecyclerView listRecyclerView, keywordRecyclerView, kanalRecyclerView;
-    private DataFokusModel lists;
+
+    private RecyclerView listRecyclerView, keywordRecyclerView;
 
     private TagsAdapter tagsAdapter;
 
@@ -65,7 +65,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
     private List<DataModel> listNews = new ArrayList<>();
-    private List<DataModel> listKanal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +95,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
 
         keywordRecyclerView = findViewById(R.id.keywordRecyclerView);
         listRecyclerView = findViewById(R.id.listRecyclerView);
-        kanalRecyclerView = findViewById(R.id.kanalRecyclerView);
 
         relatedShimmerLayout.startShimmer();
         detailShimmerLayout.startShimmer();
@@ -119,7 +117,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
     private void setRecyclerView() {
         showKeyword();
         showListFokus();
-        showListKanal();
     }
 
     private void showKeyword() {
@@ -134,13 +131,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         listRecyclerView.setItemAnimator(new DefaultItemAnimator());
         listRecyclerView.setNestedScrollingEnabled(false);
         listRecyclerView.setAdapter(recyclerViewDetailFokusAdapter);
-    }
-
-    private void showListKanal() {
-        kanalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        kanalRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        kanalRecyclerView.setNestedScrollingEnabled(false);
-        kanalRecyclerView.setAdapter(recyclerViewDetailFokusAdapter);
     }
 
 
@@ -190,7 +180,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<FokusDetailModel> callFokusDetail;
         Call<HeadlineModel> callListFokusDetail;
-        Call<HeadlineModel> callListKanalDetail;
 
         //detail
         callFokusDetail = apiInterface.getFokusDetail(id, key);
@@ -258,36 +247,6 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
             }
         });
 
-        //list kanal
-        callListKanalDetail = apiInterface.getListFokus(key, "cat", id, 0, 10);
-        callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
-            @Override
-            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
-                if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!listKanal.isEmpty()) {
-                        listKanal.clear();
-                    }
-                    Log.e(mId+"anjer", mId+"anjer");
-
-                    listKanal = response.body().getData();
-                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailFokusActivity.this);
-                    kanalRecyclerView.setAdapter(recyclerViewPopularAdapter);
-                    recyclerViewPopularAdapter.notifyDataSetChanged();
-                    //initListenerKanal();
-                    //swipeRefreshLayout.setRefreshing(false);
-                    detailShimmerLayout.stopShimmer();
-                    detailShimmerLayout.setVisibility(View.GONE);
-                } else {
-                    //detailShimmerLayout.setRefreshing(false);
-                    Toast.makeText(DetailFokusActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<HeadlineModel> call, Throwable t) {
-                //swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     private void addListKeyword() {

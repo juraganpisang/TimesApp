@@ -96,6 +96,7 @@ public interface ApiInterface {
     );
 
     ////https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=presiden%20jokowi&offset=0&limit=10
+    //  https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=search&title=presiden+jokowi&offset=0&limit=10
     @GET("all_news/")
     Call<HeadlineModel> getListTag(
             @Query("key") String key,

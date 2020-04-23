@@ -117,12 +117,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
 
         setRecyclerView();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
+        loadJSON();
 
         return view;
     }
@@ -264,7 +259,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                             break;
                     }
                     showErrorMessage(R.drawable.no_result, "No Result", "Please Try Again\n" +
-                            ""+errorCode);
+                            "" + errorCode);
                 }
             }
 
@@ -272,7 +267,7 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
             public void onFailure(Call<HeadlineModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
                 showErrorMessage(R.drawable.no_result, "Oopss..", "Network failure, Please Try Again\n" +
-                        ""+t.toString());
+                        "" + t.toString());
             }
         });
 
