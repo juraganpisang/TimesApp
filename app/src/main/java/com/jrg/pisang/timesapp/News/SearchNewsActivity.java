@@ -46,6 +46,8 @@ public class SearchNewsActivity extends AppCompatActivity implements SwipeRefres
     private ShimmerFrameLayout headlineShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private String tempKeyword = "";
+
     //error layout
     private RelativeLayout errorLayout;
     private ImageView errorImage;
@@ -88,14 +90,14 @@ public class SearchNewsActivity extends AppCompatActivity implements SwipeRefres
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                loadJSON("");
+                //loadJSON(newText);
                 return false;
             }
         });
 
         showHeadline();
 
-        loadJSON("");
+        loadJSON(tempKeyword);
     }
 
 
@@ -137,6 +139,7 @@ public class SearchNewsActivity extends AppCompatActivity implements SwipeRefres
         Call<HeadlineModel> callHeadline;
 
         if(keyword.length() > 0){
+            tempKeyword = keyword;
             callHeadline = apiInterface.getListTag(key, "search", keyword , 0, 10);
         }else{
             callHeadline = apiInterface.getNewsHeadline(key, "headline" ,0, 5);
@@ -204,7 +207,7 @@ public class SearchNewsActivity extends AppCompatActivity implements SwipeRefres
 
     @Override
     public void onRefresh() {
-        loadJSON("");
+        loadJSON(tempKeyword);
     }
 
     private void showErrorMessage(int imageView, String title, String message) {
