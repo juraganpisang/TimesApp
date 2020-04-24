@@ -29,6 +29,7 @@ import com.jrg.pisang.timesapp.Model.DataFokusModel;
 import com.jrg.pisang.timesapp.Model.FokusDetailModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.News.DetailNewsActivity;
+import com.jrg.pisang.timesapp.News.TagActivity;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -124,6 +125,7 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         keywordRecyclerView.setLayoutManager(layoutManager);
         tagsAdapter = new TagsAdapter(listKeyword, this);
         keywordRecyclerView.setAdapter(tagsAdapter);
+        initListenerKeyword();
     }
 
     private void showListFokus() {
@@ -155,26 +157,21 @@ public class DetailFokusActivity extends AppCompatActivity implements AppBarLayo
         });
     }
 
-//    private void initListenerKanal() {
-//        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(DetailFokusActivity.this, DetailNewsActivity.class);
-//
-//                DataModel data = listNews.get(position);
-//                intent.putExtra("id", data.getNews_id());
-//                intent.putExtra("title", data.getNews_title());
-//                intent.putExtra("caption", data.getNews_caption());
-//                intent.putExtra("image", data.getNews_image_new());
-//                intent.putExtra("content", data.getNews_content());
-//                intent.putExtra("date", data.getNews_datepub());
-//                intent.putExtra("source", data.getNews_writer());
-//                intent.putExtra("url", data.getUrl_ci());
-//                intent.putExtra("tags", data.getNews_tags());
-//                startActivity(intent);
-//            }
-//        });
-//    }
+
+
+    private void initListenerKeyword() {
+        tagsAdapter.setOnItemClickListener(new TagsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailFokusActivity.this, TagActivity.class);
+
+                intent.putExtra("tag", listKeyword.get(position));
+
+                startActivity(intent);
+            }
+        });
+
+    }
 
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);

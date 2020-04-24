@@ -71,12 +71,7 @@ public class FotoMediaFragment extends Fragment implements SwipeRefreshLayout.On
 
         setRecyclerView();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
+        loadJSON();
 
         return view;
     }
