@@ -52,4 +52,7 @@ dependencies {
 
     //youtube
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+
+    //notification
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
 }
