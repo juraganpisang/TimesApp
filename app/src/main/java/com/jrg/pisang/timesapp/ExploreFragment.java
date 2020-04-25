@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -92,13 +93,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         fokusShimmerLayout.startShimmer();
 
         setRecyclerView();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
-
+        loadJSON();
         return view;
     }
 
@@ -109,7 +104,9 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void showFocus() {
-        fokusRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        fokusRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.HORIZONTAL, false));
+//        fokusRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         fokusRecyclerView.setItemAnimator(new DefaultItemAnimator());
         fokusRecyclerView.setNestedScrollingEnabled(false);
         fokusRecyclerView.setAdapter(recyclerViewFokusAdapter);
@@ -142,8 +139,8 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailFokusActivity.class);
 
-                DataFokusModel data = fokus.get(position);
-                intent.putExtra("id", data.getFocnews_id());
+                DataModel data = listKanal.get(position);
+                intent.putExtra("id", data.getCatnews_id());
                 startActivity(intent);
             }
         });
@@ -154,7 +151,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Call<FokusModel> callFokus;
         Call<HeadlineModel> callListKanalDetail;
 
-        callFokus = apiInterface.getFokus(key, 0, 15);
+        callFokus = apiInterface.getFokus(key, 0, 9);
         callFokus.enqueue(new Callback<FokusModel>() {
             @Override
             public void onResponse(Call<FokusModel> call, Response<FokusModel> response) {
