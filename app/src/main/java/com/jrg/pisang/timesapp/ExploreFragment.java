@@ -72,14 +72,14 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
-        searchView = view.findViewById(R.id.SearchExplore);
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getContext(), SearchNewsActivity.class);
-                startActivity(i);
-            }
-        });
+//        searchView = view.findViewById(R.id.SearchExplore);
+//        searchView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getContext(), SearchNewsActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);

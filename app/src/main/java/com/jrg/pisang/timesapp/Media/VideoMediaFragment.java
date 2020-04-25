@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewFotoAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewNewsAdapter;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewVideoAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Model.DataFotoModel;
@@ -42,7 +43,7 @@ public class VideoMediaFragment extends Fragment implements SwipeRefreshLayout.O
 
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
-    private RecyclerViewNewsAdapter recyclerViewNewsAdapter;
+    private RecyclerViewVideoAdapter recyclerViewVideoAdapter;
 
     private RecyclerView videoRecyclerView;
 
@@ -84,20 +85,13 @@ public class VideoMediaFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     private void showVideo() {
-
-        videoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        videoRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        videoRecyclerView.setNestedScrollingEnabled(false);
-        videoRecyclerView.setAdapter(recyclerViewNewsAdapter);
-//        videoRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-////        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
-////        ekoranRecyclerView.setNestedScrollingEnabled(false);
-//        videoRecyclerView.setAdapter(recyclerViewNewsAdapter);
+        videoRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        videoRecyclerView.setAdapter(recyclerViewVideoAdapter);
         videoRecyclerView.setHasFixedSize(true);
     }
 
     private void initListenerVideo(){
-        recyclerViewNewsAdapter.setOnItemClickListener(new RecyclerViewNewsAdapter.OnItemClickListener() {
+        recyclerViewVideoAdapter.setOnItemClickListener(new RecyclerViewVideoAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DetailNewsActivity.class);
@@ -124,16 +118,16 @@ public class VideoMediaFragment extends Fragment implements SwipeRefreshLayout.O
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<HeadlineModel> callFoto;
 
-        callFoto = apiInterface.getListTag(key, "tag", "timesvlog", 0, 10);
+        callFoto = apiInterface.getListTag(key, "tag", "timesvlog", 0, 20);
         callFoto.enqueue(new Callback<HeadlineModel>() {
             @Override
             public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
 
                     videos = response.body().getData();
-                    recyclerViewNewsAdapter = new RecyclerViewNewsAdapter(videos, getContext());
-                    videoRecyclerView.setAdapter(recyclerViewNewsAdapter);
-                    recyclerViewNewsAdapter.notifyDataSetChanged();
+                    recyclerViewVideoAdapter = new RecyclerViewVideoAdapter(videos, getContext());
+                    videoRecyclerView.setAdapter(recyclerViewVideoAdapter);
+                    recyclerViewVideoAdapter.notifyDataSetChanged();
 
                     initListenerVideo();
                     swipeRefreshLayout.setRefreshing(false);

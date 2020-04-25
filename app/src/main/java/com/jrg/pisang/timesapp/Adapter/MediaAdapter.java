@@ -35,9 +35,9 @@ public class MediaAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return " FOTO ";
+                return " PHOTO ";
             case 1:
-                return " VIDEO ";
+                return " TIMES TV ";
             default:
                 return null;
         }
