@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,9 @@ import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +71,11 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
     private LinearLayout titleAppbar;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl, mId, tempTags, mTags;
+    private String mImage, mTitle, mDate, mSource, mCaption, mContent, mUrl, mId, tempTags, mTags, mYtube, linkYtube;
     private String[] separatorTags;
     private int mIdNews;
+    private Intent intent;
+    private YouTubePlayerView youTubePlayerView;
 
     private NestedScrollView nestedScrollView;
 
@@ -101,6 +108,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         source = findViewById(R.id.textViewSource);
         date = findViewById(R.id.textViewDate);
         content = findViewById(R.id.webViewContent);
+        youTubePlayerView = findViewById(R.id.youtube_player_view);
 
         //sosmed
         shareWhatsapp = findViewById(R.id.shareWhatsapp);
@@ -115,7 +123,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         detailShimmerLayout.startShimmer();
 
         //get intent
-        Intent intent = getIntent();
+        intent = getIntent();
         mId = intent.getStringExtra("id");
         mTitle = intent.getStringExtra("title");
         mCaption = intent.getStringExtra("caption");
@@ -125,6 +133,19 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         mSource = intent.getStringExtra("source");
         mUrl = intent.getStringExtra("url");
         tempTags = intent.getStringExtra("tags");
+        if (intent.hasExtra("youtube")) {
+            mYtube = intent.getStringExtra("youtube");
+            imageView.setVisibility(View.GONE);
+            youTubePlayerView.setVisibility(View.VISIBLE);
+            appbar_subtile.setVisibility(View.GONE);
+
+            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(YouTubePlayer youTubePlayer) {
+                    youTubePlayer.loadVideo(mYtube, 0);
+                }
+            });
+        }
 
         separatorTags = tempTags.split(",");
         mTags = separatorTags[0];

@@ -111,6 +111,7 @@ public class VideoMediaFragment extends Fragment implements SwipeRefreshLayout.O
                 intent.putExtra("date", data.getNews_datepub());
                 intent.putExtra("source", data.getNews_writer());
                 intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("youtube", data.getNews_ytube_id());
                 intent.putExtra("tags", data.getNews_tags());
 
                 startActivity(intent);

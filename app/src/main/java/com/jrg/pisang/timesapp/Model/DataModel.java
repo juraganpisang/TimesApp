@@ -42,6 +42,10 @@ public class DataModel {
     @Expose
     private String news_content;
 
+    @SerializedName("news_ytube_id")
+    @Expose
+    private String news_ytube_id;
+
     @SerializedName("news_tags")
     @Expose
     private String news_tags;
@@ -140,6 +144,14 @@ public class DataModel {
 
     public void setNews_description(String news_description) {
         this.news_description = news_description;
+    }
+
+    public String getNews_ytube_id() {
+        return news_ytube_id;
+    }
+
+    public void setNews_ytube_id(String news_ytube_id) {
+        this.news_ytube_id = news_ytube_id;
     }
 
     public String getNews_content() {
