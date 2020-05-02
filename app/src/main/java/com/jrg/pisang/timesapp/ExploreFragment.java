@@ -27,9 +27,11 @@ import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Explore.DetailFokusActivity;
 import com.jrg.pisang.timesapp.Model.DataFokusModel;
+import com.jrg.pisang.timesapp.Model.DataKanalModel;
 import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.Model.FokusModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
+import com.jrg.pisang.timesapp.Model.KanalModel;
 import com.jrg.pisang.timesapp.News.SearchNewsActivity;
 
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private DataFokusModel lists;
 
     private List<DataFokusModel> fokus = new ArrayList<>();
-    private List<DataModel> listKanal = new ArrayList<>();
+    private List<DataKanalModel> listKanal = new ArrayList<>();
 
     private ShimmerFrameLayout fokusShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -113,10 +115,11 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void showListKanal() {
-        kanalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        kanalRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.HORIZONTAL, false));
+//        fokusRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         kanalRecyclerView.setItemAnimator(new DefaultItemAnimator());
         kanalRecyclerView.setNestedScrollingEnabled(false);
-        kanalRecyclerView.setAdapter(recyclerViewPopularAdapter);
+        kanalRecyclerView.setAdapter(recyclerViewKanalAdapter);
     }
 
     private void initListenerFokus() {
@@ -149,7 +152,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<FokusModel> callFokus;
-        Call<HeadlineModel> callListKanalDetail;
+        Call<KanalModel> callListKanalDetail;
 
         callFokus = apiInterface.getFokus(key, 0, 9);
         callFokus.enqueue(new Callback<FokusModel>() {
@@ -181,10 +184,10 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
 
         //list kanal
-        callListKanalDetail = apiInterface.getListFokus(key, "cat", 6, 0, 10);
-        callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
+        callListKanalDetail = apiInterface.getKanal(key);
+        callListKanalDetail.enqueue(new Callback<KanalModel>() {
             @Override
-            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
+            public void onResponse(Call<KanalModel> call, Response<KanalModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     if (!listKanal.isEmpty()) {
                         listKanal.clear();
@@ -202,7 +205,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
 
             @Override
-            public void onFailure(Call<HeadlineModel> call, Throwable t) {
+            public void onFailure(Call<KanalModel> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

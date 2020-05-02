@@ -7,6 +7,7 @@ import com.jrg.pisang.timesapp.Model.FokusModel;
 import com.jrg.pisang.timesapp.Model.FotoDetailModel;
 import com.jrg.pisang.timesapp.Model.FotoModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
+import com.jrg.pisang.timesapp.Model.KanalModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -50,6 +51,13 @@ public interface ApiInterface {
     @GET("koran_detail/{id}")
     Call<EKoranDetailModel> getEKoranDetail(
             @Path(value = "id", encoded = true) int id,
+            @Query("key") String key
+    );
+
+    //https://api.timesindonesia.co.id/v1/kanal/?key=NyEIwDL51eeaoVhYGPaF
+    //kanal
+    @GET("kanal/")
+    Call<KanalModel> getKanal(
             @Query("key") String key
     );
 
