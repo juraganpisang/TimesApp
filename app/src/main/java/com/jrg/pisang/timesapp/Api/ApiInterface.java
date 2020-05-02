@@ -1,5 +1,6 @@
 package com.jrg.pisang.timesapp.Api;
 
+import com.jrg.pisang.timesapp.Model.DetailKanalModel;
 import com.jrg.pisang.timesapp.Model.FokusDetailModel;
 import com.jrg.pisang.timesapp.Model.EKoranDetailModel;
 import com.jrg.pisang.timesapp.Model.EkoranModel;
@@ -60,6 +61,15 @@ public interface ApiInterface {
     Call<KanalModel> getKanal(
             @Query("key") String key
     );
+
+    //https://api.timesindonesia.co.id/v1/cat_detail/peristiwa-nasional?key=NyEIwDL51eeaoVhYGPaF
+    //detailkanal
+    @GET("cat_detail/{catnews_title}")
+    Call<DetailKanalModel> getDetailKanal(
+            @Path(value = "catnews_title", encoded = true) String catnews_title,
+            @Query("key") String key
+    );
+
 
     //https://api.timesindonesia.co.id/v1/list_focus/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=5
     //fokus

@@ -7,33 +7,25 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewDetailFokusAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewFokusAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewKanalAdapter;
-import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Explore.DetailFokusActivity;
 import com.jrg.pisang.timesapp.Model.DataFokusModel;
 import com.jrg.pisang.timesapp.Model.DataKanalModel;
-import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.Model.FokusModel;
-import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.Model.KanalModel;
-import com.jrg.pisang.timesapp.News.SearchNewsActivity;
+import com.jrg.pisang.timesapp.News.DetailKanalActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,10 +133,10 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerViewKanalAdapter.setOnItemClickListener(new RecyclerViewKanalAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Intent intent = new Intent(getContext(), DetailFokusActivity.class);
+            Intent intent = new Intent(getContext(), DetailKanalActivity.class);
 
             DataKanalModel data = kanal.get(position);
-//            intent.putExtra("id", data.getFocnews_id());
+            intent.putExtra("name", data.getSlug());
             startActivity(intent);
         }
     });
