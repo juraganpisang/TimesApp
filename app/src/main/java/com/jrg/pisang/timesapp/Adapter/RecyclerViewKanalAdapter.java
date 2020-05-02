@@ -10,17 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jrg.pisang.timesapp.Model.DataFokusModel;
+import com.jrg.pisang.timesapp.Model.DataKanalModel;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.List;
 
 public class RecyclerViewKanalAdapter extends RecyclerView.Adapter<RecyclerViewKanalAdapter.MyViewHolder> {
 
-    private List<DataFokusModel> data;
+    private List<DataKanalModel> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewKanalAdapter(List<DataFokusModel> data, Context context) {
+    public RecyclerViewKanalAdapter(List<DataKanalModel> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -34,9 +35,9 @@ public class RecyclerViewKanalAdapter extends RecyclerView.Adapter<RecyclerViewK
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        DataFokusModel model = data.get(position);
+        DataKanalModel model = data.get(position);
 
-        holder.focnews_title.setText(model.getFocnews_title());
+        holder.kanal_name.setText(model.getName());
     }
 
     @Override
@@ -54,7 +55,7 @@ public class RecyclerViewKanalAdapter extends RecyclerView.Adapter<RecyclerViewK
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView focnews_title;
+        TextView kanal_name;
         OnItemClickListener onItemClickListener;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
@@ -62,7 +63,7 @@ public class RecyclerViewKanalAdapter extends RecyclerView.Adapter<RecyclerViewK
 
             itemView.setOnClickListener(this);
 
-            focnews_title = itemView.findViewById(R.id.focnews_title);
+            kanal_name = itemView.findViewById(R.id.focnews_title);
 
             this.onItemClickListener = onItemClickListener;
         }
