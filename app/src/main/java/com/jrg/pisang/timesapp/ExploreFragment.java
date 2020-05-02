@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewDetailFokusAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewFokusAdapter;
+import com.jrg.pisang.timesapp.Adapter.RecyclerViewKanalAdapter;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
@@ -50,14 +51,14 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
     private RecyclerViewFokusAdapter recyclerViewFokusAdapter;
-    private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
+    private RecyclerViewKanalAdapter recyclerViewKanalAdapter;
 
     private RecyclerView fokusRecyclerView, kanalRecyclerView;
 
     private DataFokusModel lists;
 
     private List<DataFokusModel> fokus = new ArrayList<>();
-    private List<DataKanalModel> listKanal = new ArrayList<>();
+    private List<DataKanalModel> kanal = new ArrayList<>();
 
     private ShimmerFrameLayout fokusShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -137,16 +138,16 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     private void initListenerKanal() {
-        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), DetailFokusActivity.class);
+        recyclerViewKanalAdapter.setOnItemClickListener(new RecyclerViewKanalAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            Intent intent = new Intent(getContext(), DetailFokusActivity.class);
 
-                DataModel data = listKanal.get(position);
-                intent.putExtra("id", data.getCatnews_id());
-                startActivity(intent);
-            }
-        });
+            DataKanalModel data = kanal.get(position);
+//            intent.putExtra("id", data.getFocnews_id());
+            startActivity(intent);
+        }
+    });
     }
 
     public void loadJSON() {
@@ -189,14 +190,11 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public void onResponse(Call<KanalModel> call, Response<KanalModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!listKanal.isEmpty()) {
-                        listKanal.clear();
-                    }
 
-                    listKanal = response.body().getData();
-                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, getContext());
-                    kanalRecyclerView.setAdapter(recyclerViewPopularAdapter);
-                    recyclerViewPopularAdapter.notifyDataSetChanged();
+                    kanal = response.body().getData();
+                    recyclerViewKanalAdapter = new RecyclerViewKanalAdapter(kanal, getContext());
+                    kanalRecyclerView.setAdapter(recyclerViewKanalAdapter);
+                    recyclerViewKanalAdapter.notifyDataSetChanged();
                     initListenerKanal();
                     swipeRefreshLayout.setRefreshing(false);
                 } else {

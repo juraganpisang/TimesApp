@@ -3,7 +3,7 @@ package com.jrg.pisang.timesapp.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class DataKanalModel {
+public class DataKanalModel {
     @SerializedName("id")
     @Expose
     private String id;
@@ -20,11 +20,11 @@ class DataKanalModel {
     @Expose
     private String url;
 
-    public String get_Id() {
+    public String getId() {
         return id;
     }
 
-    public void set_Id(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,14 +32,23 @@ class DataKanalModel {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
     public void setSlug(String slug) {
         this.slug = slug;
     }
-    public String get_Url() {
+
+    public String getUrl() {
         return url;
     }
 
-    public void set_Url(String url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 }

@@ -29,7 +29,4 @@ public class KanalModel {
     public void setData(List<DataKanalModel> data) {
         this.data = data;
     }
-
-
-
 }
