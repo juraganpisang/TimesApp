@@ -54,7 +54,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
 
     private RecyclerView keywordRecyclerView;
 
-    //private TagsAdapter tagsAdapter;
+    private TagsAdapter tagsAdapter;
 
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
@@ -123,9 +123,9 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
     private void showKeyword() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         keywordRecyclerView.setLayoutManager(layoutManager);
-        //tagsAdapter = new TagsAdapter(listKeyword, this);
-        //keywordRecyclerView.setAdapter(tagsAdapter);
-        //initListenerKeyword();
+        tagsAdapter = new TagsAdapter(listKeyword, this);
+        keywordRecyclerView.setAdapter(tagsAdapter);
+        initListenerKeyword();
     }
 
     private void loadJSON() {
@@ -172,6 +172,19 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         for (int i=0; i<keyword.length; i++){
             listKeyword.add(keyword[i]);
         }
+    }
+    private void initListenerKeyword() {
+        tagsAdapter.setOnItemClickListener(new TagsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailKanalActivity.this, TagActivity.class);
+
+                intent.putExtra("tag", listKeyword.get(position));
+
+                startActivity(intent);
+            }
+        });
+
     }
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
