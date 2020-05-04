@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "510762036688",
+    "firebase_url": "https://fir-notifications-36927.firebaseio.com",
+    "project_id": "fir-notifications-36927",
+    "storage_bucket": "fir-notifications-36927.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510762036688:android:9c0cd354f340dcc518ddd5",
+        "android_client_info": {
+          "package_name": "com.jrg.pisang.timesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510762036688-m10j2jsuqm53bhd38gq5bdvhcu1bo9iu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8hDcMb83SxUozHqf5yMOZN8TDPIl8aLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510762036688-m10j2jsuqm53bhd38gq5bdvhcu1bo9iu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

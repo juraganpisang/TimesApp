@@ -28,6 +28,7 @@ import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
 import com.jrg.pisang.timesapp.Model.DataModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
+import com.jrg.pisang.timesapp.OneSignalApplication;
 import com.jrg.pisang.timesapp.R;
 
 import java.util.ArrayList;
@@ -64,6 +65,8 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
     private TextView errorTitle, errorMessage;
     private Button btnRetry;
 
+    private OneSignalApplication mInstance;
+
     public HeadlineNewsFragment() {
         // Required empty public constructor
     }
@@ -73,6 +76,8 @@ public class HeadlineNewsFragment extends Fragment implements SwipeRefreshLayout
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_headline_news, container, false);
+
+        mInstance = OneSignalApplication.getInstance();
 
         //error layout
         errorLayout = view.findViewById(R.id.errorLayout);
