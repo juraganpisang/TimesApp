@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import com.jrg.pisang.timesapp.Model.DataFokusModel;
 import com.jrg.pisang.timesapp.Model.DataKanalModel;
 import com.jrg.pisang.timesapp.Model.FokusModel;
 import com.jrg.pisang.timesapp.Model.KanalModel;
-import com.jrg.pisang.timesapp.News.DetailKanalActivity;
+import com.jrg.pisang.timesapp.Explore.DetailKanalActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,15 +132,19 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void initListenerKanal() {
         recyclerViewKanalAdapter.setOnItemClickListener(new RecyclerViewKanalAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(View view, int position) {
-            Intent intent = new Intent(getContext(), DetailKanalActivity.class);
-
-            DataKanalModel data = kanal.get(position);
-            intent.putExtra("name", data.getSlug());
-            startActivity(intent);
-        }
-    });
+            @Override
+            public void onItemClick(View view, int position) {
+                DataKanalModel data = kanal.get(position);
+                Intent intent = new Intent(getContext(), DetailKanalActivity.class);
+                intent.putExtra("id", data.getId());
+                intent.putExtra("name", data.getSlug());
+                intent.putExtra("url", data.getUrl());
+                if (data.isNew()) {
+                    intent.putExtra("new", data.getName());
+                }
+                startActivity(intent);
+            }
+        });
     }
 
     public void loadJSON() {
@@ -176,7 +181,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         });
 
-        //list kanal
+        //kanal
         callListKanalDetail = apiInterface.getKanal(key);
         callListKanalDetail.enqueue(new Callback<KanalModel>() {
             @Override
@@ -184,6 +189,20 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (response.isSuccessful() && response.body().getData() != null) {
 
                     kanal = response.body().getData();
+                    //tambah kanal
+                    DataKanalModel kanalTv = new DataKanalModel();
+                    kanalTv.setName("Times TV");
+                    kanalTv.setId("99");
+                    kanalTv.setUrl("/tag/timesvlog");
+                    kanalTv.setNew(true);
+                    DataKanalModel kanalBola = new DataKanalModel();
+                    kanalBola.setName("Jadwal Sepakbola");
+                    kanalBola.setId("100");
+                    kanalBola.setUrl("/tag/jadwal-sepakbola");
+                    kanalBola.setNew(true);
+                    kanal.add(kanalTv);
+                    kanal.add(kanalBola);
+
                     recyclerViewKanalAdapter = new RecyclerViewKanalAdapter(kanal, getContext());
                     kanalRecyclerView.setAdapter(recyclerViewKanalAdapter);
                     recyclerViewKanalAdapter.notifyDataSetChanged();

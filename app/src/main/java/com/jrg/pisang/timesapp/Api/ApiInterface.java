@@ -103,7 +103,10 @@ public interface ApiInterface {
             @Query("key") String key
     );
 
+    //focus list berita
     //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=focus&cat_id=212&offset=0&limit=10
+    //kanal list berita
+    //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=cat&cat_id=9&offset=0&limit=10
     @GET("all_news/")
     Call<HeadlineModel> getListFokus(
             @Query("key") String key,

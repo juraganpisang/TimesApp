@@ -1,4 +1,4 @@
-package com.jrg.pisang.timesapp.News;
+package com.jrg.pisang.timesapp.Explore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,11 +25,8 @@ import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
 import com.jrg.pisang.timesapp.Adapter.TagsAdapter;
 import com.jrg.pisang.timesapp.Api.ApiClient;
 import com.jrg.pisang.timesapp.Api.ApiInterface;
-import com.jrg.pisang.timesapp.Explore.DetailFokusActivity;
 import com.jrg.pisang.timesapp.Model.DataModel;
-import com.jrg.pisang.timesapp.Model.DataFokusModel;
 import com.jrg.pisang.timesapp.Model.DetailKanalModel;
-import com.jrg.pisang.timesapp.Model.FokusDetailModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.News.DetailNewsActivity;
 import com.jrg.pisang.timesapp.News.TagActivity;
@@ -42,11 +39,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.jrg.pisang.timesapp.R;
-
-public class DetailKanalActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener{
+public class DetailKanalActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
     private int id;
-    private String name;
+    private String name, url, tempId, newTag;
 
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
 
@@ -58,6 +53,8 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
     private TagsAdapter tagsAdapter;
     private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
+    private LinearLayout keywordLL;
+    private View view1, view2;
 
     private TextView appbar_title, appbar_subtile, title, date, description;
     private boolean isHideToolbar = false;
@@ -70,6 +67,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
     private List<DataModel> listKanal = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +84,9 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("");
 
+        keywordLL = findViewById(R.id.keywordLL);
+        view1 = findViewById(R.id.view1);
+        view2 = findViewById(R.id.view2);
         nestedScrollView = findViewById(R.id.detailNSV);
         appBarLayout = findViewById(R.id.appbar);
         appBarLayout.addOnOffsetChangedListener(this);
@@ -105,17 +106,25 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
 
         //get intent
         Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        Log.e("bambang:", name);
-//
+        if (intent.hasExtra("new")) {
+            tempId = intent.getStringExtra("id");
+            id = Integer.valueOf(tempId);
+            if (id == 99) {
+                name = "timesvlog";
+            } else if (id == 100) {
+                name = "jadwal sepakbola";
+            }
+
+            url = intent.getStringExtra("url");
+        } else {
+            tempId = intent.getStringExtra("id");
+            id = Integer.valueOf(tempId);
+            name = intent.getStringExtra("name");
+            url = intent.getStringExtra("url");
+        }
         setRecyclerView();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
+        loadJSON();
     }
 
     private void setRecyclerView() {
@@ -143,74 +152,128 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         Call<DetailKanalModel> callDetailKanal;
         Call<HeadlineModel> callListKanalDetail;
 
-        //detail
-        callDetailKanal = apiInterface.getDetailKanal(name, key);
-        callDetailKanal.enqueue(new Callback<DetailKanalModel>() {
-            @Override
-            public void onResponse(Call<DetailKanalModel> call, Response<DetailKanalModel> response) {
-                if (response.isSuccessful() && response.body().getData() != null) {
+        if (id >= 99) {
+            //list tag
+            callListKanalDetail = apiInterface.getListTag(key, "tag", name, 0, 10);
+            callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
+                @Override
+                public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
+                    if (response.isSuccessful() && response.body().getData() != null) {
+                        if (!listKanal.isEmpty()) {
+                            listKanal.clear();
+                        }
 
-                    detailShimmerLayout.stopShimmer();
-                    detailShimmerLayout.setVisibility(View.GONE);
-                    relatedShimmerLayout.stopShimmer();
-                    relatedShimmerLayout.setVisibility(View.GONE);
-                    appBarLayout.setVisibility(View.VISIBLE);
-                    nestedScrollView.setVisibility(View.VISIBLE);
+                        detailShimmerLayout.stopShimmer();
+                        detailShimmerLayout.setVisibility(View.GONE);
+                        relatedShimmerLayout.stopShimmer();
+                        relatedShimmerLayout.setVisibility(View.GONE);
+                        appBarLayout.setVisibility(View.VISIBLE);
+                        nestedScrollView.setVisibility(View.VISIBLE);
 
-                    //set data
+                        if (id == 99) {
+                            appbar_title.setText("Times TV");
+                        } else if (id == 100) {
+                            appbar_title.setText("Jadwal Sepakbola");
+                        }
 
-                    appbar_title.setText(response.body().getData().getCatnews_title());
-                    //appbar_subtile.setText("timesindonesia.co.id"+response.body().getDetailKanal().get());
-                    title.setText(response.body().getData().getCatnews_title());
-                    date.setText(response.body().getData().getCreated()+" WIB");
-                    description.setText(response.body().getData().getCatnews_description());
-                    keyword = response.body().getData().getCatnews_keyword().split(",");
+                        appbar_subtile.setText("timesindonesia.co.id" + url);
+                        view1.setVisibility(View.GONE);
+                        view2.setVisibility(View.GONE);
+                        title.setVisibility(View.GONE);
+                        keywordLL.setVisibility(View.GONE);
+                        date.setVisibility(View.GONE);
+                        description.setVisibility(View.GONE);
 
-                    addListKeyword();
-
-                } else {
-                    Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DetailKanalModel> call, Throwable t) {
-                Toast.makeText(DetailKanalActivity.this, "gagal", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //list kanal
-        callListKanalDetail = apiInterface.getListTag(key, "tag", name, 0, 10);
-        callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
-            @Override
-            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
-                if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!listKanal.isEmpty()) {
-                        listKanal.clear();
+                        listKanal = response.body().getData();
+                        recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailKanalActivity.this);
+                        listRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                        recyclerViewPopularAdapter.notifyDataSetChanged();
+                        initListenerList();
+                        //swipeRefreshLayout.setRefreshing(false);
+                        detailShimmerLayout.stopShimmer();
+                        detailShimmerLayout.setVisibility(View.GONE);
+                    } else {
+                        //detailShimmerLayout.setRefreshing(false);
+                        Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
                     }
-
-                    listKanal = response.body().getData();
-                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailKanalActivity.this);
-                    listRecyclerView.setAdapter(recyclerViewPopularAdapter);
-                    recyclerViewPopularAdapter.notifyDataSetChanged();
-                    initListenerList();
-                    //swipeRefreshLayout.setRefreshing(false);
-                    detailShimmerLayout.stopShimmer();
-                    detailShimmerLayout.setVisibility(View.GONE);
-                } else {
-                    //detailShimmerLayout.setRefreshing(false);
-                    Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<HeadlineModel> call, Throwable t) {
-                //swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+                @Override
+                public void onFailure(Call<HeadlineModel> call, Throwable t) {
+                    //swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        } else {
+            //detail
+            callDetailKanal = apiInterface.getDetailKanal(name, key);
+            callDetailKanal.enqueue(new Callback<DetailKanalModel>() {
+                @Override
+                public void onResponse(Call<DetailKanalModel> call, Response<DetailKanalModel> response) {
+                    if (response.isSuccessful() && response.body().getData() != null) {
+
+                        detailShimmerLayout.stopShimmer();
+                        detailShimmerLayout.setVisibility(View.GONE);
+                        relatedShimmerLayout.stopShimmer();
+                        relatedShimmerLayout.setVisibility(View.GONE);
+                        appBarLayout.setVisibility(View.VISIBLE);
+                        nestedScrollView.setVisibility(View.VISIBLE);
+
+                        //set data
+
+                        appbar_title.setText(response.body().getData().getCatnews_title());
+                        appbar_subtile.setText("timesindonesia.co.id" + url);
+                        title.setText(response.body().getData().getCatnews_title());
+                        date.setText(response.body().getData().getCreated() + " WIB");
+                        description.setText(response.body().getData().getCatnews_description());
+                        keyword = response.body().getData().getCatnews_keyword().split(",");
+
+                        addListKeyword();
+
+                    } else {
+                        Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DetailKanalModel> call, Throwable t) {
+                    Toast.makeText(DetailKanalActivity.this, "gagal", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            //list kanal
+            callListKanalDetail = apiInterface.getListFokus(key, "cat", id, 0, 10);
+            callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
+                @Override
+                public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
+                    if (response.isSuccessful() && response.body().getData() != null) {
+                        if (!listKanal.isEmpty()) {
+                            listKanal.clear();
+                        }
+
+                        listKanal = response.body().getData();
+                        recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailKanalActivity.this);
+                        listRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                        recyclerViewPopularAdapter.notifyDataSetChanged();
+                        initListenerList();
+                        //swipeRefreshLayout.setRefreshing(false);
+                        detailShimmerLayout.stopShimmer();
+                        detailShimmerLayout.setVisibility(View.GONE);
+                    } else {
+                        //detailShimmerLayout.setRefreshing(false);
+                        Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<HeadlineModel> call, Throwable t) {
+                    //swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
+
     private void addListKeyword() {
-        for (int i=0; i<keyword.length; i++){
+        for (int i = 0; i < keyword.length; i++) {
             listKeyword.add(keyword[i]);
         }
     }
@@ -230,6 +293,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
                 intent.putExtra("date", data.getNews_datepub());
                 intent.putExtra("source", data.getNews_writer());
                 intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("youtube", data.getNews_ytube_id());
                 intent.putExtra("tags", data.getNews_tags());
                 startActivity(intent);
             }
@@ -263,6 +327,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
             isHideToolbar = !isHideToolbar;
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

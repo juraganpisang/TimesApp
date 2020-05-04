@@ -134,17 +134,19 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         mUrl = intent.getStringExtra("url");
         tempTags = intent.getStringExtra("tags");
         if (intent.hasExtra("youtube")) {
-            mYtube = intent.getStringExtra("youtube");
-            imageView.setVisibility(View.GONE);
-            youTubePlayerView.setVisibility(View.VISIBLE);
-            appbar_subtile.setVisibility(View.GONE);
+            if (!intent.getStringExtra("youtube").equals(null)) {
+                mYtube = intent.getStringExtra("youtube");
+                imageView.setVisibility(View.GONE);
+                youTubePlayerView.setVisibility(View.VISIBLE);
+                appbar_subtile.setVisibility(View.GONE);
 
-            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                @Override
-                public void onReady(YouTubePlayer youTubePlayer) {
-                    youTubePlayer.loadVideo(mYtube, 0);
-                }
-            });
+                youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady(YouTubePlayer youTubePlayer) {
+                        youTubePlayer.loadVideo(mYtube, 0);
+                    }
+                });
+            }
         }
 
         separatorTags = tempTags.split(",");

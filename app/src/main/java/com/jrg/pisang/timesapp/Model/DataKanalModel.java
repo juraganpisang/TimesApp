@@ -20,6 +20,16 @@ public class DataKanalModel {
     @Expose
     private String url;
 
+    private boolean isNew;
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
     public String getId() {
         return id;
     }

@@ -38,6 +38,7 @@ public class RecyclerViewKanalAdapter extends RecyclerView.Adapter<RecyclerViewK
         DataKanalModel model = data.get(position);
 
         holder.kanal_name.setText(model.getName());
+
     }
 
     @Override
