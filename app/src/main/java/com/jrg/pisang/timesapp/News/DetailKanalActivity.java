@@ -52,10 +52,11 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
 
     private RecyclerViewDetailKanalAdapter recyclerViewDetailKanalAdapter;
 
-    private RecyclerView keywordRecyclerView;
+    private RecyclerViewDetailFokusAdapter recyclerViewDetailFokusAdapter;
+    private RecyclerView listRecyclerView, keywordRecyclerView;
 
     private TagsAdapter tagsAdapter;
-
+    private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
     private ShimmerFrameLayout relatedShimmerLayout, detailShimmerLayout;
 
     private TextView appbar_title, appbar_subtile, title, date, description;
@@ -68,6 +69,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
 
     private String[] keyword;
     private ArrayList<String> listKeyword = new ArrayList<>();
+    private List<DataModel> listKanal = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         description = findViewById(R.id.textViewDescription);
 
         keywordRecyclerView = findViewById(R.id.keywordRecyclerView);
-        //listRecyclerView = findViewById(R.id.listRecyclerView);
+        listRecyclerView = findViewById(R.id.listRecyclerView);
 
         relatedShimmerLayout.startShimmer();
         detailShimmerLayout.startShimmer();
@@ -118,6 +120,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
 
     private void setRecyclerView() {
         showKeyword();
+        showListKanal();
     }
 
     private void showKeyword() {
@@ -128,9 +131,17 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         initListenerKeyword();
     }
 
+    private void showListKanal() {
+        listRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        listRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        listRecyclerView.setNestedScrollingEnabled(false);
+        listRecyclerView.setAdapter(recyclerViewDetailKanalAdapter);
+    }
+
     private void loadJSON() {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<DetailKanalModel> callDetailKanal;
+        Call<HeadlineModel> callListKanalDetail;
 
         //detail
         callDetailKanal = apiInterface.getDetailKanal(name, key);
@@ -165,6 +176,36 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
             @Override
             public void onFailure(Call<DetailKanalModel> call, Throwable t) {
                 Toast.makeText(DetailKanalActivity.this, "gagal", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //list kanal
+        callListKanalDetail = apiInterface.getListTag(key, "tag", name, 0, 10);
+        callListKanalDetail.enqueue(new Callback<HeadlineModel>() {
+            @Override
+            public void onResponse(Call<HeadlineModel> call, Response<HeadlineModel> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    if (!listKanal.isEmpty()) {
+                        listKanal.clear();
+                    }
+
+                    listKanal = response.body().getData();
+                    recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailKanalActivity.this);
+                    listRecyclerView.setAdapter(recyclerViewPopularAdapter);
+                    recyclerViewPopularAdapter.notifyDataSetChanged();
+                    //initListenerList();
+                    //swipeRefreshLayout.setRefreshing(false);
+                    detailShimmerLayout.stopShimmer();
+                    detailShimmerLayout.setVisibility(View.GONE);
+                } else {
+                    //detailShimmerLayout.setRefreshing(false);
+                    Toast.makeText(DetailKanalActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HeadlineModel> call, Throwable t) {
+                //swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

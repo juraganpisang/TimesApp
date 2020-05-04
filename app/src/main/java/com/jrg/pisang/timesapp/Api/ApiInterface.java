@@ -113,6 +113,8 @@ public interface ApiInterface {
             @Query("limit") int limit
     );
 
+
+
     ////https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=presiden%20jokowi&offset=0&limit=10
     //  https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=search&title=presiden+jokowi&offset=0&limit=10
     //https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=timesvlog&offset=0&limit=10
