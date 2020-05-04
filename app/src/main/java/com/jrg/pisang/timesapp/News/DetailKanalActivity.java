@@ -193,7 +193,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
                     recyclerViewPopularAdapter = new RecyclerViewPopularAdapter(listKanal, DetailKanalActivity.this);
                     listRecyclerView.setAdapter(recyclerViewPopularAdapter);
                     recyclerViewPopularAdapter.notifyDataSetChanged();
-                    //initListenerList();
+                    initListenerList();
                     //swipeRefreshLayout.setRefreshing(false);
                     detailShimmerLayout.stopShimmer();
                     detailShimmerLayout.setVisibility(View.GONE);
@@ -214,6 +214,28 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
             listKeyword.add(keyword[i]);
         }
     }
+
+    private void initListenerList() {
+        recyclerViewPopularAdapter.setOnItemClickListener(new RecyclerViewPopularAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DetailKanalActivity.this, DetailNewsActivity.class);
+
+                DataModel data = listKanal.get(position);
+                intent.putExtra("id", data.getNews_id());
+                intent.putExtra("title", data.getNews_title());
+                intent.putExtra("caption", data.getNews_caption());
+                intent.putExtra("image", data.getNews_image_new());
+                intent.putExtra("content", data.getNews_content());
+                intent.putExtra("date", data.getNews_datepub());
+                intent.putExtra("source", data.getNews_writer());
+                intent.putExtra("url", data.getUrl_ci());
+                intent.putExtra("tags", data.getNews_tags());
+                startActivity(intent);
+            }
+        });
+    }
+
     private void initListenerKeyword() {
         tagsAdapter.setOnItemClickListener(new TagsAdapter.OnItemClickListener() {
             @Override
@@ -227,6 +249,7 @@ public class DetailKanalActivity extends AppCompatActivity implements AppBarLayo
         });
 
     }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         int maxScroll = appBarLayout.getTotalScrollRange();
