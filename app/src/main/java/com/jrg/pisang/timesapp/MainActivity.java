@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         //Add Space Navigation items.
         //
         navigationView.initWithSaveInstanceState(savedInstanceState);
-        navigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_android_black));
-        navigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_android_black));
-        navigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_android_black));
-        navigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_android_black));
+        navigationView.addSpaceItem(new SpaceItem("", R.drawable.home_grey));
+        navigationView.addSpaceItem(new SpaceItem("", R.drawable.category_grey));
+        navigationView.addSpaceItem(new SpaceItem("", R.drawable.foto_grey));
+        navigationView.addSpaceItem(new SpaceItem("", R.drawable.settings_grey));
 
         navigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
