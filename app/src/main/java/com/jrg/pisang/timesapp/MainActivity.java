@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView.addSpaceItem(new SpaceItem("", R.drawable.category_grey));
         navigationView.addSpaceItem(new SpaceItem("", R.drawable.foto_grey));
         navigationView.addSpaceItem(new SpaceItem("", R.drawable.settings_grey));
-
+        navigationView.showIconOnly();
+        navigationView.setSpaceItemIconSizeInOnlyIconMode(60);
         navigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
             @Override
             public void onCentreButtonClick() {

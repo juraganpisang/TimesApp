@@ -27,6 +27,7 @@ import com.jrg.pisang.timesapp.Model.DataKanalModel;
 import com.jrg.pisang.timesapp.Model.FokusModel;
 import com.jrg.pisang.timesapp.Model.KanalModel;
 import com.jrg.pisang.timesapp.Explore.DetailKanalActivity;
+import com.jrg.pisang.timesapp.News.SearchNewsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +70,14 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
-//        searchView = view.findViewById(R.id.SearchExplore);
-//        searchView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(getContext(), SearchNewsActivity.class);
-//                startActivity(i);
-//            }
-//        });
+        searchView = view.findViewById(R.id.SearchExplore);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), SearchNewsActivity.class);
+                startActivity(i);
+            }
+        });
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
