@@ -134,7 +134,7 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
         mUrl = intent.getStringExtra("url");
         tempTags = intent.getStringExtra("tags");
         if (intent.hasExtra("youtube")) {
-            if (!intent.getStringExtra("youtube").equals(null)) {
+            if (!intent.getStringExtra("youtube").equals("")) {
                 mYtube = intent.getStringExtra("youtube");
                 imageView.setVisibility(View.GONE);
                 youTubePlayerView.setVisibility(View.VISIBLE);
@@ -146,22 +146,33 @@ public class DetailNewsActivity extends AppCompatActivity implements AppBarLayou
                         youTubePlayer.loadVideo(mYtube, 0);
                     }
                 });
+            } else {
+                //call intent
+                RequestOptions requestOptions = new RequestOptions();
+                requestOptions.error(Utils.getRandomDrawbleColor());
+
+                Glide.with(DetailNewsActivity.this)
+                        .load(mImage)
+                        .apply(requestOptions)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(imageView);
             }
+        } else {
+            //call intent
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.error(Utils.getRandomDrawbleColor());
+
+            Glide.with(DetailNewsActivity.this)
+                    .load(mImage)
+                    .apply(requestOptions)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(imageView);
         }
 
         separatorTags = tempTags.split(",");
         mTags = separatorTags[0];
 
         mIdNews = Integer.valueOf(mId);
-        //call intent
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.error(Utils.getRandomDrawbleColor());
-
-        Glide.with(DetailNewsActivity.this)
-                .load(mImage)
-                .apply(requestOptions)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageView);
 
         appbar_title.setText(mTitle);
         appbar_subtile.setText("timesindonesia.co.id" + mUrl);
