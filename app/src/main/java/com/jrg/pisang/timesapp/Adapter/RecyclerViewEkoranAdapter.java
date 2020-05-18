@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.jrg.pisang.timesapp.Model.DataDetailKanalModel;
 import com.jrg.pisang.timesapp.Model.DataKoranModel;
 import com.jrg.pisang.timesapp.R;
 import com.jrg.pisang.timesapp.Utils;
@@ -104,5 +105,11 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
         public void onClick(View v) {
             onItemClickListener.onItemClick(v, getAdapterPosition());
         }
+    }
+    public void addPagin(List<DataKoranModel> dataKoranModel){
+        for (DataKoranModel dkm :dataKoranModel){
+            dataKoranModel.add(dkm);
+        }
+        notifyDataSetChanged();
     }
 }

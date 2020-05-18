@@ -7,8 +7,10 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,10 +43,16 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private RecyclerView ekoranRecyclerView;
 
     private List<DataKoranModel> korans = new ArrayList<>();
-
+    private ProgressBar progressBar;
     private ShimmerFrameLayout ekoranShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private GridLayoutManager layoutManager;
+    private ApiInterface apiInterface;
+    private int page_number=1;
+    private int item_count=1;
+    private boolean isLoading = true;
+    private int pastVisibleItem, visibleItemCOunt,totalItemCount, previous_total=0;
+    private int view_threshold = 15;
     public EkoranFragment() {
         // Required empty public constructor
     }
@@ -58,7 +66,9 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-
+        progressBar=view.findViewById(R.id.progressBar);
+        layoutManager = new GridLayoutManager(getContext(), 2);
+        progressBar.setVisibility(View.VISIBLE);
         ekoranShimmerLayout = view.findViewById(R.id.ekoranShimmerLayout);
 
         ekoranRecyclerView = view.findViewById(R.id.ekoranRecyclerView);
@@ -104,7 +114,8 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        progressBar.setVisibility(View.VISIBLE);
         Call<EkoranModel> callKoran;
 
         callKoran = apiInterface.getEKoran(key, 0, 15);
@@ -119,6 +130,7 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     korans = response.body().getData();
                     recyclerViewEkoranAdapter = new RecyclerViewEkoranAdapter(korans, getContext());
                     ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
+                    progressBar.setVisibility(View.GONE);
                     recyclerViewEkoranAdapter.notifyDataSetChanged();
 
                     initListenerEkoran();
@@ -131,6 +143,58 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<EkoranModel> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        ekoranRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCOunt = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItem = layoutManager.findFirstVisibleItemPosition();
+
+                if(dy>0){
+                    if(isLoading){
+                        if(totalItemCount>previous_total){
+                            isLoading=false;
+                            previous_total = totalItemCount;
+                        }
+                    }
+                    if(isLoading&&(totalItemCount-visibleItemCOunt)<=(pastVisibleItem+view_threshold)){
+                       page_number++;
+                        performPagination();
+                        isLoading = true;
+                    }
+                }
+            }
+        });
+    }
+
+    public void performPagination(){
+        progressBar.setVisibility(View.VISIBLE);
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<EkoranModel> callKoran;
+
+        callKoran = apiInterface.getEKoran(key, 0, 15);
+        callKoran.enqueue(new Callback<EkoranModel>() {
+            @Override
+            public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    List<DataKoranModel> dataKoranModels = response.body().getData();
+                    recyclerViewEkoranAdapter.addPagin(dataKoranModels);
+
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
+                }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
