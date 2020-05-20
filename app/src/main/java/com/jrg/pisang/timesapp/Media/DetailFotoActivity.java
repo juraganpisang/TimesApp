@@ -23,6 +23,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.jrg.pisang.timesapp.Adapter.RecyclerViewPopularAdapter;
@@ -48,7 +54,6 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
     private RecyclerViewPopularAdapter recyclerViewPopularAdapter;
     private DataFotoModel dataFotoModel;
 
-
     private ShimmerFrameLayout detailShimmerLayout;
 
     private ImageView imageView, shareFacebook, shareWhatsapp, shareLine, shareTwitter;
@@ -63,10 +68,22 @@ public class DetailFotoActivity extends AppCompatActivity implements AppBarLayou
 
     private NestedScrollView nestedScrollView;
 
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_foto);
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

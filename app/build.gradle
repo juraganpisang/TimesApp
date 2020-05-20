@@ -24,6 +24,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
                 onesignal_app_id               : '03980d4e-46c4-487c-bef4-b6831f5c8e0a',
@@ -51,6 +52,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.1.0-alpha05'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:multidex:1.0.3'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     //facebook shimmer
@@ -77,4 +79,6 @@ dependencies {
     implementation 'com.onesignal:OneSignal:[3.13.0, 3.99.99]'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
 
+    //iklan
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
 }
