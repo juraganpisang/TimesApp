@@ -32,8 +32,8 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoran, Context context) {
-        this.dataKoranModel = dataKoran;
+    public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoranModel, Context context) {
+        this.dataKoranModel = dataKoranModel;
         this.context = context;
     }
 
@@ -45,7 +45,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewEkoranAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         DataKoranModel model = dataKoranModel.get(position);
 
@@ -106,8 +106,8 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
             onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
-    public void addPagin(List<DataKoranModel> dataKoranModel){
-        for (DataKoranModel dkm :dataKoranModel){
+    public void addImages(List<DataKoranModel> images){
+        for (DataKoranModel dkm : images){
             dataKoranModel.add(dkm);
         }
         notifyDataSetChanged();

@@ -79,27 +79,26 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical"/>
 
-<!--                <Button-->
-<!--                    android:layout_marginTop="16dp"-->
-<!--                    android:layout_marginBottom="22dp"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:text="load more"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="12sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:background="@drawable/button"/>-->
-
+                <!--                <Button-->
+                <!--                    android:layout_marginTop="16dp"-->
+                <!--                    android:layout_marginBottom="22dp"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center"-->
+                <!--                    android:padding="10dp"-->
+                <!--                    android:text="load more"-->
+                <!--                    android:textColor="@color/white"-->
+                <!--                    android:textSize="12sp"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    android:background="@drawable/button"/>-->
+                
                 <ProgressBar
                     android:layout_marginTop="10dp"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:id="@+id/progressBar"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="center_horizontal"
                     android:visibility="gone"/>
-
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

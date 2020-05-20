@@ -4,6 +4,7 @@ package com.jrg.pisang.timesapp.EKoran;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,13 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private ShimmerFrameLayout ekoranShimmerLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GridLayoutManager layoutManager;
-    private ApiInterface apiInterface;
-    private int page_number=1;
-    private int item_count=1;
+
+    private int page_number = 0;
+    //private int item_count = 0;
     private boolean isLoading = true;
-    private int pastVisibleItem, visibleItemCOunt,totalItemCount, previous_total=0;
+    private int pastVisibleItem, visibleItemCOunt, totalItemCount, previous_total = 0;
     private int view_threshold = 15;
+
     public EkoranFragment() {
         // Required empty public constructor
     }
@@ -66,23 +68,19 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        progressBar=view.findViewById(R.id.progressBar);
-        layoutManager = new GridLayoutManager(getContext(), 2);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar = view.findViewById(R.id.progressBar);
+
         ekoranShimmerLayout = view.findViewById(R.id.ekoranShimmerLayout);
 
         ekoranRecyclerView = view.findViewById(R.id.ekoranRecyclerView);
 
         ekoranShimmerLayout.startShimmer();
 
+        progressBar.setVisibility(View.VISIBLE);
+
         setRecyclerView();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
+        loadJSON();
 
         return view;
     }
@@ -92,11 +90,11 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void showEkoran() {
-        ekoranRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        ekoranRecyclerView.setNestedScrollingEnabled(false);
-        ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
+        layoutManager = new GridLayoutManager(getContext(), 3);
         ekoranRecyclerView.setHasFixedSize(true);
+        ekoranRecyclerView.setLayoutManager(layoutManager);
+//        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        ekoranRecyclerView.setNestedScrollingEnabled(false);;
     }
 
     private void initListenerEkoran() {
@@ -114,11 +112,11 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     public void loadJSON() {
         swipeRefreshLayout.setRefreshing(true);
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         progressBar.setVisibility(View.VISIBLE);
         Call<EkoranModel> callKoran;
 
-        callKoran = apiInterface.getEKoran(key, 0, 15);
+        callKoran = apiInterface.getEKoran(key, page_number, 15);
         callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
             public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
@@ -130,7 +128,6 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     korans = response.body().getData();
                     recyclerViewEkoranAdapter = new RecyclerViewEkoranAdapter(korans, getContext());
                     ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
-                    progressBar.setVisibility(View.GONE);
                     recyclerViewEkoranAdapter.notifyDataSetChanged();
 
                     initListenerEkoran();
@@ -139,6 +136,8 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     ekoranShimmerLayout.stopShimmer();
                     ekoranShimmerLayout.setVisibility(View.GONE);
 
+                    progressBar.setVisibility(View.GONE);
+                    //item_count++;
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
@@ -160,15 +159,15 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 totalItemCount = layoutManager.getItemCount();
                 pastVisibleItem = layoutManager.findFirstVisibleItemPosition();
 
-                if(dy>0){
-                    if(isLoading){
-                        if(totalItemCount>previous_total){
-                            isLoading=false;
+                if (dy > 0) {
+                    if (isLoading) {
+                        if (totalItemCount > previous_total) {
+                            isLoading = false;
                             previous_total = totalItemCount;
                         }
                     }
-                    if(isLoading&&(totalItemCount-visibleItemCOunt)<=(pastVisibleItem+view_threshold)){
-                       page_number++;
+                    if (!isLoading && (totalItemCount - visibleItemCOunt) <= (pastVisibleItem + view_threshold)) {
+                        page_number += 15;
                         performPagination();
                         isLoading = true;
                     }
@@ -177,19 +176,19 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
         });
     }
 
-    public void performPagination(){
+    public void performPagination() {
         progressBar.setVisibility(View.VISIBLE);
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<EkoranModel> callKoran;
 
-        callKoran = apiInterface.getEKoran(key, 0, 15);
+        callKoran = apiInterface.getEKoran(key, page_number, 15);
         callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
             public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
                     List<DataKoranModel> dataKoranModels = response.body().getData();
-                    recyclerViewEkoranAdapter.addPagin(dataKoranModels);
-
+                    recyclerViewEkoranAdapter.addImages(dataKoranModels);
+                    Toast.makeText(getContext(), "MASUK PAK EMO", Toast.LENGTH_SHORT).show();
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
