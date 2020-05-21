@@ -1,5 +1,6 @@
 package com.jrg.pisang.timesapp.Api;
 
+import com.jrg.pisang.timesapp.Model.DataKoranModel;
 import com.jrg.pisang.timesapp.Model.DetailKanalModel;
 import com.jrg.pisang.timesapp.Model.FokusDetailModel;
 import com.jrg.pisang.timesapp.Model.EKoranDetailModel;
@@ -9,6 +10,8 @@ import com.jrg.pisang.timesapp.Model.FotoDetailModel;
 import com.jrg.pisang.timesapp.Model.FotoModel;
 import com.jrg.pisang.timesapp.Model.HeadlineModel;
 import com.jrg.pisang.timesapp.Model.KanalModel;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -43,6 +46,15 @@ public interface ApiInterface {
     //ekoran
     @GET("all_ekoran/")
     Call<EkoranModel> getEKoran(
+            @Query("key") String key,
+            @Query("offset") int offset,
+            @Query("limit") int limit
+    );
+
+    //https://api.timesindonesia.co.id/v1/all_ekoran/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=10
+    //ekoran
+    @GET("all_ekoran/")
+    Call<List<DataKoranModel>> getImagesEkoran(
             @Query("key") String key,
             @Query("offset") int offset,
             @Query("limit") int limit

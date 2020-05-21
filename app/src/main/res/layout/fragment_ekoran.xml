@@ -52,4 +52,5 @@
         android:id="@+id/progressBar"
         android:visibility="gone"
         />
+
 </RelativeLayout>

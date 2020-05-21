@@ -4,6 +4,7 @@ package com.jrg.pisang.timesapp.EKoran;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class EkoranFragment extends Fragment {
     private RecyclerView ekoranRecyclerView;
     private ProgressBar progressBar;
     private GridLayoutManager layoutManager;
+
     private ApiInterface apiInterface;
     private RecyclerViewEkoranAdapter recyclerViewEkoranAdapter;
 
@@ -54,6 +56,7 @@ public class EkoranFragment extends Fragment {
 
     private boolean isLoading = false;
     private int pastVisibleItem, visibleItemCOunt,totalItemCount, previous_total=0;
+
     private int view_threshold = 15;
 
     public EkoranFragment() {
@@ -65,6 +68,7 @@ public class EkoranFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_ekoran, container, false);
+
 
 //        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 //        swipeRefreshLayout.setOnRefreshListener(this);
@@ -85,6 +89,7 @@ public class EkoranFragment extends Fragment {
         Call<EkoranModel> callKoran;
 
         callKoran = apiInterface.getEKoran(key, page_number, item_count);
+
         callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
             public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
@@ -92,7 +97,6 @@ public class EkoranFragment extends Fragment {
                     korans = response.body().getData();
                     recyclerViewEkoranAdapter = new RecyclerViewEkoranAdapter(korans, getContext());
                     ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
-                    progressBar.setVisibility(View.GONE);
                     recyclerViewEkoranAdapter.notifyDataSetChanged();
 
                     initListenerEkoran();
@@ -101,6 +105,8 @@ public class EkoranFragment extends Fragment {
 //                    ekoranShimmerLayout.stopShimmer();
 //                    ekoranShimmerLayout.setVisibility(View.GONE);
 
+                    progressBar.setVisibility(View.GONE);
+                    //item_count++;
                 } else {
                     // swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
@@ -166,12 +172,13 @@ public class EkoranFragment extends Fragment {
 
     }
 
-    public void performPagination(){
+    public void performPagination() {
         progressBar.setVisibility(View.VISIBLE);
         //apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<EkoranModel> callKoran;
 
         callKoran = apiInterface.getEKoran(key, page_number, item_count);
+
         callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
             public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
