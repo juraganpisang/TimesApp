@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -34,25 +35,27 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class EkoranFragment extends Fragment {
 
     public static final String key = "NyEIwDL51eeaoVhYGPaF";
-
-    private RecyclerViewEkoranAdapter recyclerViewEkoranAdapter;
-
     private RecyclerView ekoranRecyclerView;
-
-    private List<DataKoranModel> korans = new ArrayList<>();
     private ProgressBar progressBar;
-    private ShimmerFrameLayout ekoranShimmerLayout;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private GridLayoutManager layoutManager;
     private ApiInterface apiInterface;
-    private int page_number=1;
-    private int item_count=1;
-    private boolean isLoading = true;
+    private RecyclerViewEkoranAdapter recyclerViewEkoranAdapter;
+
+    private List<DataKoranModel> korans = new ArrayList<>();
+
+    //private ShimmerFrameLayout ekoranShimmerLayout;
+    //private SwipeRefreshLayout swipeRefreshLayout;
+
+    private int page_number = 1;
+    private int item_count = 15;
+
+    private boolean isLoading = false;
     private int pastVisibleItem, visibleItemCOunt,totalItemCount, previous_total=0;
     private int view_threshold = 15;
+
     public EkoranFragment() {
         // Required empty public constructor
     }
@@ -63,41 +66,87 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         View view = inflater.inflate(R.layout.fragment_ekoran, container, false);
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+//        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(this);
+//        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+
         progressBar=view.findViewById(R.id.progressBar);
-        layoutManager = new GridLayoutManager(getContext(), 2);
-        progressBar.setVisibility(View.VISIBLE);
-        ekoranShimmerLayout = view.findViewById(R.id.ekoranShimmerLayout);
 
+//        ekoranShimmerLayout = view.findViewById(R.id.ekoranShimmerLayout);
+//        ekoranShimmerLayout.startShimmer();
         ekoranRecyclerView = view.findViewById(R.id.ekoranRecyclerView);
+        layoutManager = new GridLayoutManager(getContext(), 3);
+        ekoranRecyclerView.setHasFixedSize(true);
+        ekoranRecyclerView.setLayoutManager(layoutManager);
+        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ekoranShimmerLayout.startShimmer();
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        progressBar.setVisibility(View.VISIBLE);
+        Call<EkoranModel> callKoran;
 
-        setRecyclerView();
-
-        new Handler().postDelayed(new Runnable() {
+        callKoran = apiInterface.getEKoran(key, page_number, item_count);
+        callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
-            public void run() {
-                loadJSON();
-            }
-        }, 2000);
+            public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
+                if (response.isSuccessful() && response.body().getData() != null) {
+                    korans = response.body().getData();
+                    recyclerViewEkoranAdapter = new RecyclerViewEkoranAdapter(korans, getContext());
+                    ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
+                    progressBar.setVisibility(View.GONE);
+                    recyclerViewEkoranAdapter.notifyDataSetChanged();
 
+                    initListenerEkoran();
+//                    swipeRefreshLayout.setRefreshing(false);
+//
+//                    ekoranShimmerLayout.stopShimmer();
+//                    ekoranShimmerLayout.setVisibility(View.GONE);
+
+                } else {
+                    // swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EkoranModel> call, Throwable t) {
+                //swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        ekoranRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCOunt = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItem = layoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading ) {
+                    if ((visibleItemCOunt + pastVisibleItem) >= totalItemCount
+                            && pastVisibleItem >= 0) {
+                        performPagination();
+                    }
+                }else{
+                    //Toast.makeText(getContext(), "No Result 5", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //setRecyclerView();
         return view;
     }
 
-    private void setRecyclerView() {
-        showEkoran();
-    }
+//    private void setRecyclerView() {
+//        showEkoran();
+//    }
 
-    private void showEkoran() {
-        ekoranRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-//        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        ekoranRecyclerView.setNestedScrollingEnabled(false);
-        ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
-        ekoranRecyclerView.setHasFixedSize(true);
-    }
+//    private void showEkoran() {
+//        ekoranRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+////        ekoranRecyclerView.setItemAnimator(new DefaultItemAnimator());
+////        ekoranRecyclerView.setNestedScrollingEnabled(false);
+//        ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
+//        ekoranRecyclerView.setHasFixedSize(true);
+//    }
 
     private void initListenerEkoran() {
         recyclerViewEkoranAdapter.setOnItemClickListener(new RecyclerViewEkoranAdapter.OnItemClickListener() {
@@ -113,85 +162,25 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     public void loadJSON() {
-        swipeRefreshLayout.setRefreshing(true);
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        progressBar.setVisibility(View.VISIBLE);
-        Call<EkoranModel> callKoran;
+        //swipeRefreshLayout.setRefreshing(true);
 
-        callKoran = apiInterface.getEKoran(key, 0, 15);
-        callKoran.enqueue(new Callback<EkoranModel>() {
-            @Override
-            public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
-                if (response.isSuccessful() && response.body().getData() != null) {
-                    if (!korans.isEmpty()) {
-                        korans.clear();
-                    }
-
-                    korans = response.body().getData();
-                    recyclerViewEkoranAdapter = new RecyclerViewEkoranAdapter(korans, getContext());
-                    ekoranRecyclerView.setAdapter(recyclerViewEkoranAdapter);
-                    progressBar.setVisibility(View.GONE);
-                    recyclerViewEkoranAdapter.notifyDataSetChanged();
-
-                    initListenerEkoran();
-                    swipeRefreshLayout.setRefreshing(false);
-
-                    ekoranShimmerLayout.stopShimmer();
-                    ekoranShimmerLayout.setVisibility(View.GONE);
-
-                } else {
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<EkoranModel> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        ekoranRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                visibleItemCOunt = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisibleItem = layoutManager.findFirstVisibleItemPosition();
-
-                if(dy>0){
-                    if(isLoading){
-                        if(totalItemCount>previous_total){
-                            isLoading=false;
-                            previous_total = totalItemCount;
-                        }
-                    }
-                    if(isLoading&&(totalItemCount-visibleItemCOunt)<=(pastVisibleItem+view_threshold)){
-                       page_number++;
-                        performPagination();
-                        isLoading = true;
-                    }
-                }
-            }
-        });
     }
 
     public void performPagination(){
         progressBar.setVisibility(View.VISIBLE);
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        //apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<EkoranModel> callKoran;
 
-        callKoran = apiInterface.getEKoran(key, 0, 15);
+        callKoran = apiInterface.getEKoran(key, page_number, item_count);
         callKoran.enqueue(new Callback<EkoranModel>() {
             @Override
             public void onResponse(Call<EkoranModel> call, Response<EkoranModel> response) {
                 if (response.isSuccessful() && response.body().getData() != null) {
-                    List<DataKoranModel> dataKoranModels = response.body().getData();
-                    recyclerViewEkoranAdapter.addPagin(dataKoranModels);
+                    List<DataKoranModel> dataKoranModelList = response.body().getData();
+                    recyclerViewEkoranAdapter.addPagin(dataKoranModelList);
 
                 } else {
-                    swipeRefreshLayout.setRefreshing(false);
+                    //swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "No Result!", Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);
@@ -199,26 +188,21 @@ public class EkoranFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
             @Override
             public void onFailure(Call<EkoranModel> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
+                //swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ekoranShimmerLayout.startShimmer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        ekoranShimmerLayout.stopShimmer();
-        ekoranShimmerLayout.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onRefresh() {
-        loadJSON();
-    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//       // ekoranShimmerLayout.startShimmer();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+////        ekoranShimmerLayout.stopShimmer();
+////        ekoranShimmerLayout.setVisibility(View.GONE);
+//    }
 }

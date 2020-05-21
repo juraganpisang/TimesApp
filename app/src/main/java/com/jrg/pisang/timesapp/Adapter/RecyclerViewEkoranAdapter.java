@@ -28,12 +28,12 @@ import java.util.List;
 
 public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerViewEkoranAdapter.MyViewHolder> {
 
-    private List<DataKoranModel> dataKoranModel;
+    private List<DataKoranModel> dataKoranModelList;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
     public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoran, Context context) {
-        this.dataKoranModel = dataKoran;
+        this.dataKoranModelList = dataKoran;
         this.context = context;
     }
 
@@ -47,17 +47,17 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewEkoranAdapter.MyViewHolder holder, int position) {
 
-        DataKoranModel model = dataKoranModel.get(position);
+        DataKoranModel model = dataKoranModelList.get(position);
 
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(Utils.getRandomDrawbleColor());
-        requestOptions.error(Utils.getRandomDrawbleColor());
-        requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
-        requestOptions.centerCrop();
+//        RequestOptions requestOptions = new RequestOptions();
+//        requestOptions.placeholder(Utils.getRandomDrawbleColor());
+//        requestOptions.error(Utils.getRandomDrawbleColor());
+//        requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
+//        requestOptions.centerCrop();
 
         Glide.with(context)
                 .load(model.getImg1())
-                .apply(requestOptions)
+//                .apply(requestOptions)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -75,7 +75,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return dataKoranModel.size();
+        return dataKoranModelList.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -108,7 +108,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     }
     public void addPagin(List<DataKoranModel> dataKoranModel){
         for (DataKoranModel dkm :dataKoranModel){
-            dataKoranModel.add(dkm);
+            dataKoranModelList.add(dkm);
         }
         notifyDataSetChanged();
     }
