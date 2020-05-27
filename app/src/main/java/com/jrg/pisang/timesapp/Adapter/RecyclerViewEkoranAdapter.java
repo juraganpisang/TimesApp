@@ -32,8 +32,8 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoranModel, Context context) {
-        this.dataKoranModel = dataKoranModel;
+    public RecyclerViewEkoranAdapter(List<DataKoranModel> dataKoranModelList, Context context) {
+        this.dataKoranModelList = dataKoranModelList;
         this.context = context;
     }
 
@@ -106,9 +106,11 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
             onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
-    public void addPagin(List<DataKoranModel> dataKoranModel){
-        for (DataKoranModel dkm :dataKoranModel){
+
+    public void addPagin(List<DataKoranModel> dataKoranModel) {
+        for (DataKoranModel dkm : dataKoranModel) {
             dataKoranModelList.add(dkm);
-        notifyDataSetChanged();
+            notifyDataSetChanged();
+        }
     }
 }
