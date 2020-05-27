@@ -110,7 +110,7 @@ public class RecyclerViewEkoranAdapter extends RecyclerView.Adapter<RecyclerView
     public void addPagin(List<DataKoranModel> dataKoranModel) {
         for (DataKoranModel dkm : dataKoranModel) {
             dataKoranModelList.add(dkm);
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 }

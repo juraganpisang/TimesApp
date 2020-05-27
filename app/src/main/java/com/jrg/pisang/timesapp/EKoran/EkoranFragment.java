@@ -55,9 +55,7 @@ public class EkoranFragment extends Fragment {
     private int item_count = 15;
 
     private boolean isLoading = false;
-    private int pastVisibleItem, visibleItemCOunt,totalItemCount, previous_total=0;
-
-    private int view_threshold = 15;
+    private int pastVisibleItem, visibleItemCOunt,totalItemCount=0;
 
     public EkoranFragment() {
         // Required empty public constructor
@@ -131,7 +129,9 @@ public class EkoranFragment extends Fragment {
                 if (!isLoading ) {
                     if ((visibleItemCOunt + pastVisibleItem) >= totalItemCount
                             && pastVisibleItem >= 0) {
+                        page_number=page_number+item_count;
                         performPagination();
+                        isLoading=false;
                     }
                 }else{
                     //Toast.makeText(getContext(), "No Result 5", Toast.LENGTH_SHORT).show();
