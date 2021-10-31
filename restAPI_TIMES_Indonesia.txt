@@ -1,0 +1,83 @@
+===================================================================
+============================RestAPI TI=============================
+===================================================================
+
+DETAIL BERITA
+https://api.timesindonesia.co.id/v1/news_detail/260518?key=NyEIwDL51eeaoVhYGPaF
+Keterangan:
+- 260518 adalah ID berita
+- URL menggunakan url_ci
+
+BERITA TERKAIT
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=related_new&news_id=260518&title=virus+corona&offset=0&limit=10
+Keterangan:
+- news_id adalah ID berita yang sedang dibuka
+- title adalah tag pertama pada berita yang dibuka, Spasi diganti ke + atau %20
+
+TERBARU
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=all&offset=0&limit=10
+
+KANAL
+https://api.timesindonesia.co.id/v1/kanal/?key=NyEIwDL51eeaoVhYGPaF <list kanal>
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=cat&cat_id=9&offset=0&limit=10 <list berita>
+Keterangan:
+- Category ID, di dapat saat klik judul fokus
+
+HEADLINE
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=headline&offset=0&limit=5
+
+SEARCH
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=search&title=presiden+jokowi&offset=0&limit=10
+Keterangan:
+- Spasi diganti ke + atau %20
+
+POPULER & TRENDING
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=populer&offset=0&limit=10
+Keterangan:
+- Trending news_type=trending
+
+TAG
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=presiden%20jokowi&offset=0&limit=10
+Keterangan:
+- Spasi diganti ke + atau %20
+- Dalam prosesnya, slug tagnya presiden-jokowi, dirubah oleh sistem menjadi presiden+jokowi atau presiden%20jokowi
+
+FOKUS
+https://api.timesindonesia.co.id/v1/list_focus/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=5
+
+FOKUS DETAIL
+https://api.timesindonesia.co.id/v1/focus_detail/221?key=NyEIwDL51eeaoVhYGPaF
+
+FOKUS - List Berita
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=focus&cat_id=212&offset=0&limit=10
+Keterangan:
+- cat_id == fokus ID, di dapat saat klik judul fokus
+
+KANAL DETAIL
+https://api.timesindonesia.co.id/v1/cat_detail/peristiwa-nasional?key=NyEIwDL51eeaoVhYGPaF
+
+FOTO
+https://api.timesindonesia.co.id/v1/all_gallery/?key=NyEIwDL51eeaoVhYGPaF&news_type=all&offset=0&limit=10
+
+FOTO DETAIL
+https://api.timesindonesia.co.id/v1/foto_detail/1435?key=NyEIwDL51eeaoVhYGPaF
+Keterangan:
+- 1435 adalah ID foto
+
+LIST FOTO
+https://api.timesindonesia.co.id/v1/foto_slide/?key=NyEIwDL51eeaoVhYGPaF&gal_id=1435
+Keterangan:
+- List foto adalah foto-foto dalam satu judul atau ID foto
+
+EKORAN
+https://api.timesindonesia.co.id/v1/all_ekoran/?key=NyEIwDL51eeaoVhYGPaF&offset=0&limit=10
+
+EKORAN DETAIL
+https://api.timesindonesia.co.id/v1/koran_detail/1199?key=NyEIwDL51eeaoVhYGPaF
+- 1199 adalah ID ekoran
+
+TIMES TV
+https://api.timesindonesia.co.id/v1/all_news/?key=NyEIwDL51eeaoVhYGPaF&news_type=tag&title=timesvlog&offset=0&limit=10
+Keterangan:
+- Setelah klik judul TIMES TV, lari ke DETAIL BERITA
+- Template DETAIL BERITA, foto utama diganti ke embed youtube
